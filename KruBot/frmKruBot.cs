@@ -39,7 +39,7 @@ namespace KruBot
             var options = new[]
             {
                 "--audio-filter", "normvol", "--norm-max-level", "1.5"
-            };
+            }; //VLC Options - Command Line specifically. Normalizing Volume here.
             vlc.VlcMediaplayerOptions = options;
             vlc.EndInit();
             vlc.Dock = DockStyle.Fill;
@@ -47,19 +47,20 @@ namespace KruBot
             vlc.Audio.Volume = tbMusicVolume.Value;
             //VLC set up.
 
-            var cred = JsonConvert.DeserializeObject<creds>(File.ReadAllText("creds.json"));
+            var cred = JsonConvert.DeserializeObject<creds>(File.ReadAllText("creds.json"));  
+            //Loads our Twitch Credentials from the Json file.
             var credentials = new ConnectionCredentials(cred.username, cred.oauth);
-            client.Initialize(credentials, "pfckrutonium");
+            client.Initialize(credentials, "pfckrutonium"); //Channel were connecting to.
             client.OnConnected += Client_OnConnected;
             client.OnJoinedChannel += Client_OnJoinedChannel;
             client.OnMessageReceived += Client_OnMessageReceived;
             client.Connect();
-            rtbChat.LinkClicked += RtbChat_LinkClicked;
+            rtbChat.LinkClicked += RtbChat_LinkClicked; //Enable clicking on links in Chat.
         }
 
         private void RtbChat_LinkClicked(object sender, LinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start(e.LinkText);
+            System.Diagnostics.Process.Start(e.LinkText); //Clicked Links need to do somthing. ANYTHING.
         }
 
         private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
@@ -75,7 +76,7 @@ namespace KruBot
             else if (e.ChatMessage.IsTurbo)
                 userTags += "[TwPr]";
             else if (e.ChatMessage.IsBroadcaster) userTags += "[Me]";
-
+            //Add User Tags
             userTags += " " + e.ChatMessage.Username + ": ";
             if (rtbChat.InvokeRequired)
                 rtbChat.Invoke((Action) delegate
@@ -86,13 +87,13 @@ namespace KruBot
                 rtbChat.AppendText(userTags + e.ChatMessage.Message + Environment.NewLine);
 
             //Act on Commands
-            if (e.ChatMessage.Message.ToLower().StartsWith("!songrequest"))
+            if (e.ChatMessage.Message.ToLower().StartsWith("!songrequest")) //user sent a song request.
                 try
                 {
-                    var ytLink = e.ChatMessage.Message.Split(' ');
+                    var ytLink = e.ChatMessage.Message.Split(' '); 
                     var url = ytLink[1];
-                    var exists = qt.Any(x => x.ytlink.ToLower() == url.ToLower());
-                    if (exists)
+                    var exists = qt.Any(x => x.ytlink.ToLower() == url.ToLower()); //Does any existing song request have the
+                    if (exists) //Same youtube URL.
                     {
                         client.SendMessage(e.ChatMessage.Channel, "Song already exists in Queue.");
                     }
@@ -103,6 +104,7 @@ namespace KruBot
                         p.ytlink = ytLink[1];
                         qt.Enqueue(p);
                         client.SendMessage(e.ChatMessage.Channel, "Added " + GetVideoTitle(ytLink[1]) + " to Queue.");
+                        //Added song to the Queue.
                     }
                 }
                 catch
@@ -163,9 +165,8 @@ namespace KruBot
             }
             catch
             {
+                return "Not a valid video.";
             }
-
-            return "Not a valid video.";
         }
 
         private void SongStarter_Tick(object sender, EventArgs e)
@@ -177,18 +178,18 @@ namespace KruBot
             a = a - c * 60; //Total Minutes
             var d = b / 60; //seconds
             b = b - d * 60; //Minutes
-            lblPlayerTime.Text = d + @":" + b + @"/" + c + @":" + a;
+            lblPlayerTime.Text = d + @":" + b + @"/" + c + @":" + a; //This is hellish formatting.
             //lblPlayerTime.Text = vlc.Time.ToString();
             switch (vlc.State)
             {
                 case MediaStates.NothingSpecial:
                 {
-                    if (qt.Count > 0) SetVideo(qt.Dequeue());
+                    if (qt.Count > 0) SetVideo(qt.Dequeue()); //No Video has played yet.
                     break;
                 }
                 case MediaStates.Ended:
                 {
-                    if (qt.Count > 0) SetVideo(qt.Dequeue());
+                    if (qt.Count > 0) SetVideo(qt.Dequeue()); //A video has played, and is over.
                     break;
                 }
             }
@@ -197,9 +198,9 @@ namespace KruBot
         private void btnSendMessage_Click(object sender, EventArgs e)
         {
             client.SendMessage(client.GetJoinedChannel("pfckrutonium"), tbMsg.Text);
-            if (tbMsg.Text.ToLower().StartsWith("!songrequest"))
-                try
-                {
+            if (tbMsg.Text.ToLower().StartsWith("!songrequest")) //I sent a song request through my bot
+                try //Since it doesn't see this by default, we handle it here instead.
+                {   //It doesn't care about duplicates in this code.
                     var ytLink = tbMsg.Text.Split(' ');
                     var p = new songreq
                     {
@@ -222,17 +223,11 @@ namespace KruBot
         {
             vlc.Position = 1;
         }
-        //private void tbMsg_TextChanged_1(object sender, EventArgs e)
-        //{
-        //    e.Handled = true;
-        //    if (e.KeyCode == Keys.Enter) btnSendMessage_Click(this, new EventArgs());
-        //}
 
         private void rtbChat_TextChanged(object sender, EventArgs e)
         {
             rtbChat.SelectionStart = rtbChat.Text.Length;
             rtbChat.ScrollToCaret();
-
             //Keep our chat scrolling
         }
 
@@ -240,17 +235,20 @@ namespace KruBot
         {
             public string oauth;
             public string username;
+            //This is an object used for Twitch Authentication
         }
 
         public class songreq
         {
             public string requester;
             public string ytlink;
+            //Information that is stored in the queue. More can be added easily.
         }
 
         private void tbMusicVolume_Scroll_1(object sender, EventArgs e)
         {
             vlc.Audio.Volume = tbMusicVolume.Value;
+            //Make the volume slider functional.
         }
     }
 }
