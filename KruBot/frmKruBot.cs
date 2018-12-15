@@ -68,16 +68,34 @@ namespace KruBot
             //Build Tags
             var userTags = "";
             if (e.ChatMessage.IsMe)
+            {
                 userTags += "[Me]";
-            else if (e.ChatMessage.IsModerator)
+            }
+            if (e.ChatMessage.IsModerator)
+            {
                 userTags += "[Mod]";
-            else if (e.ChatMessage.IsSubscriber)
+            }
+            if (e.ChatMessage.IsSubscriber)
+            {
                 userTags += "[Sub]";
-            else if (e.ChatMessage.IsTurbo)
-                userTags += "[TwPr]";
-            else if (e.ChatMessage.IsBroadcaster) userTags += "[Me]";
+            }
+            if (e.ChatMessage.IsTurbo)
+            {
+                userTags += "[Turbo]";
+            }
+            if (e.ChatMessage.IsBroadcaster)
+            {
+                userTags += "[Literally God]";
+            }
             //Add User Tags
-            userTags += " " + e.ChatMessage.Username + ": ";
+            if (userTags == "")
+            {
+                userTags = e.ChatMessage.Username + ": ";
+            }
+            else
+            {
+                userTags += " " + e.ChatMessage.Username + ": ";
+            }
             if (rtbChat.InvokeRequired)
                 rtbChat.Invoke((Action) delegate
                 {

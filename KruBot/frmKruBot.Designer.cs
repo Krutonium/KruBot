@@ -40,11 +40,13 @@
             this.SidePanel = new System.Windows.Forms.TableLayoutPanel();
             this.tbMusicVolume = new System.Windows.Forms.TrackBar();
             this.tblInfo = new System.Windows.Forms.TableLayoutPanel();
-            this.lblPlayerTime = new System.Windows.Forms.Label();
-            this.lblRequester = new System.Windows.Forms.Label();
             this.lblTitle = new System.Windows.Forms.Label();
+            this.lblRequester = new System.Windows.Forms.Label();
+            this.lblPlayerTime = new System.Windows.Forms.Label();
             this.tabYouTube = new System.Windows.Forms.TabPage();
             this.SongStarter = new System.Windows.Forms.Timer(this.components);
+            this.tabSettings = new System.Windows.Forms.TabPage();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.TabControl.SuspendLayout();
             this.tabChat.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -52,12 +54,14 @@
             this.SidePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbMusicVolume)).BeginInit();
             this.tblInfo.SuspendLayout();
+            this.tabSettings.SuspendLayout();
             this.SuspendLayout();
             // 
             // TabControl
             // 
             this.TabControl.Controls.Add(this.tabChat);
             this.TabControl.Controls.Add(this.tabYouTube);
+            this.TabControl.Controls.Add(this.tabSettings);
             this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl.Location = new System.Drawing.Point(0, 0);
             this.TabControl.Name = "TabControl";
@@ -192,14 +196,14 @@
             this.tblInfo.Size = new System.Drawing.Size(131, 417);
             this.tblInfo.TabIndex = 3;
             // 
-            // lblPlayerTime
+            // lblTitle
             // 
-            this.lblPlayerTime.AutoSize = true;
-            this.lblPlayerTime.Location = new System.Drawing.Point(3, 360);
-            this.lblPlayerTime.Name = "lblPlayerTime";
-            this.lblPlayerTime.Size = new System.Drawing.Size(70, 13);
-            this.lblPlayerTime.TabIndex = 2;
-            this.lblPlayerTime.Text = "Current Time:";
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.Location = new System.Drawing.Point(3, 400);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(55, 13);
+            this.lblTitle.TabIndex = 4;
+            this.lblTitle.Text = "Song Title";
             // 
             // lblRequester
             // 
@@ -210,14 +214,14 @@
             this.lblRequester.TabIndex = 3;
             this.lblRequester.Text = "Requester";
             // 
-            // lblTitle
+            // lblPlayerTime
             // 
-            this.lblTitle.AutoSize = true;
-            this.lblTitle.Location = new System.Drawing.Point(3, 400);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(55, 13);
-            this.lblTitle.TabIndex = 4;
-            this.lblTitle.Text = "Song Title";
+            this.lblPlayerTime.AutoSize = true;
+            this.lblPlayerTime.Location = new System.Drawing.Point(3, 360);
+            this.lblPlayerTime.Name = "lblPlayerTime";
+            this.lblPlayerTime.Size = new System.Drawing.Size(70, 13);
+            this.lblPlayerTime.TabIndex = 2;
+            this.lblPlayerTime.Text = "Current Time:";
             // 
             // tabYouTube
             // 
@@ -234,6 +238,30 @@
             this.SongStarter.Enabled = true;
             this.SongStarter.Interval = 200;
             this.SongStarter.Tick += new System.EventHandler(this.SongStarter_Tick);
+            // 
+            // tabSettings
+            // 
+            this.tabSettings.Controls.Add(this.tableLayoutPanel3);
+            this.tabSettings.Location = new System.Drawing.Point(4, 22);
+            this.tabSettings.Name = "tabSettings";
+            this.tabSettings.Size = new System.Drawing.Size(809, 472);
+            this.tabSettings.TabIndex = 2;
+            this.tabSettings.Text = "Settings";
+            this.tabSettings.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 2;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.16181F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.83819F));
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 2;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(809, 472);
+            this.tableLayoutPanel3.TabIndex = 0;
             // 
             // frmKruBot
             // 
@@ -254,6 +282,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.tbMusicVolume)).EndInit();
             this.tblInfo.ResumeLayout(false);
             this.tblInfo.PerformLayout();
+            this.tabSettings.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -281,6 +310,8 @@
         private System.Windows.Forms.Label lblPlayerTime;
         private System.Windows.Forms.Label lblRequester;
         private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.TabPage tabSettings;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
     }
 }
 
