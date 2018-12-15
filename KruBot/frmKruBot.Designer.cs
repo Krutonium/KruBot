@@ -93,7 +93,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.939914F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(803, 466);
             this.tableLayoutPanel1.TabIndex = 1;
-            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
             // rtbChat
             // 
@@ -113,7 +112,6 @@
             this.tbMsg.Name = "tbMsg";
             this.tbMsg.Size = new System.Drawing.Size(597, 20);
             this.tbMsg.TabIndex = 2;
-            this.tbMsg.TextChanged += new System.EventHandler(this.tbMsg_TextChanged_1);
             // 
             // tableLayoutPanel2
             // 
@@ -174,29 +172,30 @@
             this.tbMusicVolume.Size = new System.Drawing.Size(47, 417);
             this.tbMusicVolume.TabIndex = 1;
             this.tbMusicVolume.Value = 70;
+            this.tbMusicVolume.Scroll += new System.EventHandler(this.tbMusicVolume_Scroll_1);
             // 
             // tblInfo
             // 
             this.tblInfo.ColumnCount = 1;
             this.tblInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tblInfo.Controls.Add(this.lblPlayerTime, 0, 0);
-            this.tblInfo.Controls.Add(this.lblRequester, 0, 1);
-            this.tblInfo.Controls.Add(this.lblTitle, 0, 2);
+            this.tblInfo.Controls.Add(this.lblTitle, 0, 3);
+            this.tblInfo.Controls.Add(this.lblRequester, 0, 2);
+            this.tblInfo.Controls.Add(this.lblPlayerTime, 0, 1);
             this.tblInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tblInfo.Location = new System.Drawing.Point(56, 3);
             this.tblInfo.Name = "tblInfo";
             this.tblInfo.RowCount = 4;
             this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
-            this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 339F));
-            this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+            this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+            this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
+            this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
             this.tblInfo.Size = new System.Drawing.Size(131, 417);
             this.tblInfo.TabIndex = 3;
             // 
             // lblPlayerTime
             // 
             this.lblPlayerTime.AutoSize = true;
-            this.lblPlayerTime.Location = new System.Drawing.Point(3, 0);
+            this.lblPlayerTime.Location = new System.Drawing.Point(3, 360);
             this.lblPlayerTime.Name = "lblPlayerTime";
             this.lblPlayerTime.Size = new System.Drawing.Size(70, 13);
             this.lblPlayerTime.TabIndex = 2;
@@ -205,7 +204,7 @@
             // lblRequester
             // 
             this.lblRequester.AutoSize = true;
-            this.lblRequester.Location = new System.Drawing.Point(3, 23);
+            this.lblRequester.Location = new System.Drawing.Point(3, 383);
             this.lblRequester.Name = "lblRequester";
             this.lblRequester.Size = new System.Drawing.Size(56, 13);
             this.lblRequester.TabIndex = 3;
@@ -214,7 +213,7 @@
             // lblTitle
             // 
             this.lblTitle.AutoSize = true;
-            this.lblTitle.Location = new System.Drawing.Point(3, 50);
+            this.lblTitle.Location = new System.Drawing.Point(3, 400);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(55, 13);
             this.lblTitle.TabIndex = 4;

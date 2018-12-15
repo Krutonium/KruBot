@@ -54,6 +54,12 @@ namespace KruBot
             client.OnJoinedChannel += Client_OnJoinedChannel;
             client.OnMessageReceived += Client_OnMessageReceived;
             client.Connect();
+            rtbChat.LinkClicked += RtbChat_LinkClicked;
+        }
+
+        private void RtbChat_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(e.LinkText);
         }
 
         private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
@@ -212,24 +218,15 @@ namespace KruBot
             tbMsg.Text = "";
         }
 
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-        }
-
         private void btnSkip_Click(object sender, EventArgs e)
         {
             vlc.Position = 1;
         }
-
-        private void tbMsg_TextChanged(object sender, KeyEventArgs e)
-        {
-            e.Handled = true;
-            if (e.KeyCode == Keys.Enter) btnSendMessage_Click(this, new EventArgs());
-        }
-
-        private void tbMsg_TextChanged_1(object sender, EventArgs e)
-        {
-        }
+        //private void tbMsg_TextChanged_1(object sender, EventArgs e)
+        //{
+        //    e.Handled = true;
+        //    if (e.KeyCode == Keys.Enter) btnSendMessage_Click(this, new EventArgs());
+        //}
 
         private void rtbChat_TextChanged(object sender, EventArgs e)
         {
@@ -237,11 +234,6 @@ namespace KruBot
             rtbChat.ScrollToCaret();
 
             //Keep our chat scrolling
-        }
-
-        private void tbMusicVolume_Scroll(object sender, EventArgs e)
-        {
-            vlc.Audio.Volume = tbMusicVolume.Value;
         }
 
         public class creds
@@ -254,6 +246,11 @@ namespace KruBot
         {
             public string requester;
             public string ytlink;
+        }
+
+        private void tbMusicVolume_Scroll_1(object sender, EventArgs e)
+        {
+            vlc.Audio.Volume = tbMusicVolume.Value;
         }
     }
 }
