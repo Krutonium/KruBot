@@ -12,6 +12,7 @@ using YoutubeExplode; //GPL3
 using YoutubeExplode.Models.MediaStreams;
 using NAudio;
 using NAudio.Wave;
+using CefSharp.WinForms;
 
 //TODO:
 // Capture More Information from Song Requests for Display ✔
@@ -41,7 +42,12 @@ namespace KruBot
             client.OnJoinedChannel += Client_OnJoinedChannel;
             client.OnMessageReceived += Client_OnMessageReceived;
             client.Connect();
-            rtbChat.LinkClicked += RtbChat_LinkClicked; //Enable clicking on links in Chat.
+            CefSettings settings = new CefSettings();
+            settings.CachePath = "./browsercache";
+            var browser = new ChromiumWebBrowser("https://www.twitch.tv/popout/pfckrutonium/chat?popout=");
+            browser.Dock = DockStyle.Fill;
+            BrowserWindow.Controls.Add(browser);
+
         }
 
         private void RtbChat_LinkClicked(object sender, LinkClickedEventArgs e)
@@ -51,51 +57,18 @@ namespace KruBot
 
         private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
-            //Build Tags
-            var userTags = "";
-            if (e.ChatMessage.IsMe)
-            {
-                userTags += "[Me]";
-            }
-            if (e.ChatMessage.IsModerator)
-            {
-                userTags += "[Mod]";
-            }
-            if (e.ChatMessage.IsSubscriber)
-            {
-                userTags += "[Sub]";
-            }
-            if (e.ChatMessage.IsTurbo)
-            {
-                userTags += "[Turbo]";
-            }
-            if (e.ChatMessage.IsBroadcaster)
-            {
-                userTags += "[Literally God]";
-            }
-            //Add User Tags
-            if (userTags == "")
-            {
-                userTags = e.ChatMessage.Username + ": ";
-            }
-            else
-            {
-                userTags += " " + e.ChatMessage.Username + ": ";
-            }
-            if (rtbChat.InvokeRequired)
-                rtbChat.Invoke((Action) delegate
-                {
-                    rtbChat.AppendText(userTags + e.ChatMessage.Message + Environment.NewLine);
-                });
-            else
-                rtbChat.AppendText(userTags + e.ChatMessage.Message + Environment.NewLine);
-
             //Act on Commands
-            if (e.ChatMessage.Message.ToLower().StartsWith("!songrequest")) //user sent a song request.
+            if (e.ChatMessage.Message.ToLower().StartsWith("!songrequest") || e.ChatMessage.Message.ToLower().StartsWith("!sr")) //user sent a song request.
                 try
                 {
+
                     var ytLink = e.ChatMessage.Message.Split(' '); 
                     var url = ytLink[1];
+                    if (url.ToUpper().Contains("YOUTUBE") == false && url.ToUpper().Contains("YOUTU.BE") == false)
+                    {
+                        client.SendMessage("PFCKrutonium", "That's not a valid video");
+                        return;
+                    }
                     var exists = qt.Any(x => x.ytlink.ToLower() == url.ToLower()); //Does any existing song request have the
                     if (exists) //Same youtube URL.
                     {
@@ -118,15 +91,12 @@ namespace KruBot
 
         private void Client_OnJoinedChannel(object sender, OnJoinedChannelArgs e)
         {
-            rtbChat.Invoke((Action) delegate
-            {
-                rtbChat.AppendText("Successfully connected to the channel." + Environment.NewLine);
-            });
+            client.SendMessage("pfckrutonium", "Successfully Joined");
         }
 
         private void Client_OnConnected(object sender, OnConnectedArgs e)
         {
-            rtbChat.Invoke((Action) delegate { rtbChat.AppendText("Connected to Twitch." + Environment.NewLine); });
+           
         }
 
         private string GetVideoTitle(string url)
@@ -146,23 +116,31 @@ namespace KruBot
         static bool processing = false;
         private void SongStarter_Tick(object sender, EventArgs e)
         {
-            
+
             if (qt.Count > 0 && processing == false)
             {
                 processing = true;
                 if(OutputDevice.PlaybackState == PlaybackState.Stopped)
                 {
                     var songinfo = qt.Dequeue();
-                    var id = YoutubeClient.ParseVideoId(songinfo.ytlink);
-                    var client = new YoutubeClient();
-                    var video = client.GetVideoAsync(id).Result;
-                    var streamset = client.GetVideoMediaStreamInfosAsync(id).Result;
-                    var streamInfo = streamset.Audio;
-                    using (var mf = new MediaFoundationReader(streamInfo[0].Url))
+                    try
                     {
-                        OutputDevice.Init(mf);
-                        OutputDevice.Play();
+                        var id = YoutubeClient.ParseVideoId(songinfo.ytlink);
+                        var ytclient = new YoutubeClient();
+                        var video = ytclient.GetVideoAsync(id).Result;
+                        var streamset = ytclient.GetVideoMediaStreamInfosAsync(id).Result;
+                        var streamInfo = streamset.Audio;
+                        using (var mf = new MediaFoundationReader(streamInfo[0].Url))
+                        {
+                            OutputDevice.Init(mf);
+                            OutputDevice.Play();
+                        }
+                        lblTitle.Text = video.Title;
+                        lblRequester.Text = songinfo.requester;
+                        lblPlayerTime.Text = video.Duration.ToString();
+                        client.SendMessage("PFCKrutonium", "Playing " + video.Title);
                     }
+                    catch { client.SendMessage("PFCKrutonium", "Song failed to play: " + songinfo.ytlink); }
                 }
             }
             processing = false;
@@ -187,21 +165,12 @@ namespace KruBot
                 catch
                 {
                 }
-
-            rtbChat.Invoke((Action) delegate { rtbChat.AppendText("[Me] " + tbMsg.Text + Environment.NewLine); });
             tbMsg.Text = "";
         }
 
         private void btnSkip_Click(object sender, EventArgs e)
         {
             OutputDevice.Stop();
-        }
-
-        private void rtbChat_TextChanged(object sender, EventArgs e)
-        {
-            rtbChat.SelectionStart = rtbChat.Text.Length;
-            rtbChat.ScrollToCaret();
-            //Keep our chat scrolling
         }
 
         public class creds

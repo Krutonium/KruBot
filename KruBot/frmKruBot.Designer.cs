@@ -31,8 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.TabControl = new System.Windows.Forms.TabControl();
             this.tabChat = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.rtbChat = new System.Windows.Forms.RichTextBox();
+            this.BrowserWindow = new System.Windows.Forms.TableLayoutPanel();
             this.tbMsg = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.btnSendMessage = new System.Windows.Forms.Button();
@@ -48,7 +47,7 @@
             this.SongStarter = new System.Windows.Forms.Timer(this.components);
             this.TabControl.SuspendLayout();
             this.tabChat.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.BrowserWindow.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SidePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbMusicVolume)).BeginInit();
@@ -69,7 +68,7 @@
             // 
             // tabChat
             // 
-            this.tabChat.Controls.Add(this.tableLayoutPanel1);
+            this.tabChat.Controls.Add(this.BrowserWindow);
             this.tabChat.Location = new System.Drawing.Point(4, 22);
             this.tabChat.Name = "tabChat";
             this.tabChat.Padding = new System.Windows.Forms.Padding(3);
@@ -78,33 +77,22 @@
             this.tabChat.Text = "Chat";
             this.tabChat.UseVisualStyleBackColor = true;
             // 
-            // tableLayoutPanel1
+            // BrowserWindow
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75.69975F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.30025F));
-            this.tableLayoutPanel1.Controls.Add(this.rtbChat, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.tbMsg, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.SidePanel, 1, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 92.06009F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.939914F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(803, 466);
-            this.tableLayoutPanel1.TabIndex = 1;
-            // 
-            // rtbChat
-            // 
-            this.rtbChat.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbChat.Location = new System.Drawing.Point(3, 3);
-            this.rtbChat.Name = "rtbChat";
-            this.rtbChat.Size = new System.Drawing.Size(601, 423);
-            this.rtbChat.TabIndex = 1;
-            this.rtbChat.Text = "";
-            this.rtbChat.TextChanged += new System.EventHandler(this.rtbChat_TextChanged);
+            this.BrowserWindow.ColumnCount = 2;
+            this.BrowserWindow.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75.69975F));
+            this.BrowserWindow.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.30025F));
+            this.BrowserWindow.Controls.Add(this.tbMsg, 0, 1);
+            this.BrowserWindow.Controls.Add(this.tableLayoutPanel2, 1, 1);
+            this.BrowserWindow.Controls.Add(this.SidePanel, 1, 0);
+            this.BrowserWindow.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BrowserWindow.Location = new System.Drawing.Point(3, 3);
+            this.BrowserWindow.Name = "BrowserWindow";
+            this.BrowserWindow.RowCount = 2;
+            this.BrowserWindow.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 92.06009F));
+            this.BrowserWindow.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.939914F));
+            this.BrowserWindow.Size = new System.Drawing.Size(803, 466);
+            this.BrowserWindow.TabIndex = 1;
             // 
             // tbMsg
             // 
@@ -262,8 +250,8 @@
             this.Load += new System.EventHandler(this.frmKruBot_Load);
             this.TabControl.ResumeLayout(false);
             this.tabChat.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
+            this.BrowserWindow.ResumeLayout(false);
+            this.BrowserWindow.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.SidePanel.ResumeLayout(false);
             this.SidePanel.PerformLayout();
@@ -285,8 +273,7 @@
         private System.Windows.Forms.TabControl TabControl;
         private System.Windows.Forms.TabPage tabChat;
         private System.Windows.Forms.Timer SongStarter;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.RichTextBox rtbChat;
+        private System.Windows.Forms.TableLayoutPanel BrowserWindow;
         private System.Windows.Forms.TextBox tbMsg;
         private System.Windows.Forms.Button btnSendMessage;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
