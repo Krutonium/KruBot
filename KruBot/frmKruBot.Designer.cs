@@ -43,10 +43,9 @@
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblRequester = new System.Windows.Forms.Label();
             this.lblPlayerTime = new System.Windows.Forms.Label();
-            this.tabYouTube = new System.Windows.Forms.TabPage();
-            this.SongStarter = new System.Windows.Forms.Timer(this.components);
             this.tabSettings = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.SongStarter = new System.Windows.Forms.Timer(this.components);
             this.TabControl.SuspendLayout();
             this.tabChat.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -60,7 +59,6 @@
             // TabControl
             // 
             this.TabControl.Controls.Add(this.tabChat);
-            this.TabControl.Controls.Add(this.tabYouTube);
             this.TabControl.Controls.Add(this.tabSettings);
             this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl.Location = new System.Drawing.Point(0, 0);
@@ -223,22 +221,6 @@
             this.lblPlayerTime.TabIndex = 2;
             this.lblPlayerTime.Text = "Current Time:";
             // 
-            // tabYouTube
-            // 
-            this.tabYouTube.Location = new System.Drawing.Point(4, 22);
-            this.tabYouTube.Name = "tabYouTube";
-            this.tabYouTube.Padding = new System.Windows.Forms.Padding(3);
-            this.tabYouTube.Size = new System.Drawing.Size(809, 472);
-            this.tabYouTube.TabIndex = 1;
-            this.tabYouTube.Text = "YouTube";
-            this.tabYouTube.UseVisualStyleBackColor = true;
-            // 
-            // SongStarter
-            // 
-            this.SongStarter.Enabled = true;
-            this.SongStarter.Interval = 200;
-            this.SongStarter.Tick += new System.EventHandler(this.SongStarter_Tick);
-            // 
             // tabSettings
             // 
             this.tabSettings.Controls.Add(this.tableLayoutPanel3);
@@ -262,6 +244,12 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(809, 472);
             this.tableLayoutPanel3.TabIndex = 0;
+            // 
+            // SongStarter
+            // 
+            this.SongStarter.Enabled = true;
+            this.SongStarter.Interval = 200;
+            this.SongStarter.Tick += new System.EventHandler(this.SongStarter_Tick);
             // 
             // frmKruBot
             // 
@@ -296,7 +284,6 @@
 
         private System.Windows.Forms.TabControl TabControl;
         private System.Windows.Forms.TabPage tabChat;
-        private System.Windows.Forms.TabPage tabYouTube;
         private System.Windows.Forms.Timer SongStarter;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.RichTextBox rtbChat;
