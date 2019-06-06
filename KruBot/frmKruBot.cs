@@ -33,8 +33,17 @@ namespace KruBot
 
         private void frmKruBot_Load(object sender, EventArgs e)
         {
-
-            var cred = JsonConvert.DeserializeObject<creds>(File.ReadAllText("creds.json"));  
+            var cred = new creds();
+            if (File.Exists("creds.json"))
+            {
+                cred = JsonConvert.DeserializeObject<creds>(File.ReadAllText("creds.json"));
+            } else
+            {
+                frmCredentials frmcreds = new frmCredentials();
+                frmcreds.ShowDialog();
+                cred = JsonConvert.DeserializeObject<creds>(File.ReadAllText("creds.json"));
+            }
+             
             //Loads our Twitch Credentials from the Json file.
             var credentials = new ConnectionCredentials(cred.username, cred.oauth);
             client.Initialize(credentials, "pfckrutonium"); //Channel were connecting to.
