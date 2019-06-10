@@ -29,6 +29,8 @@ namespace KruBot
         public static TwitchClient client = new TwitchClient();
         public static Queue<songreq> qt = new Queue<songreq>();
         public static WaveOutEvent OutputDevice = new WaveOutEvent();
+        public static string ChannelToMod;
+        public static ChromiumWebBrowser browser;
         public frmKruBot()
         {
             InitializeComponent();
@@ -36,6 +38,26 @@ namespace KruBot
 
         private void frmKruBot_Load(object sender, EventArgs e)
         {
+
+            if (File.Exists("creds.json.old"))
+            {
+                DialogResult dialogResult = MessageBox.Show("We detected that your credentials were in the middle of being replaced. Recover?", "Recover Credentials?", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    File.Move("creds.json.old", "creds.json");
+                }
+                else
+                {
+                    File.Delete("creds.json.old");
+                }
+            }
+
+
+            CefSettings settings = new CefSettings();
+            settings.CachePath = "./browsercache";
+            settings.PersistSessionCookies = true;
+            settings.PersistUserPreferences = true;
+            Cef.Initialize(settings);
             var cred = new creds();
             if (File.Exists("creds.json"))
             {
@@ -46,28 +68,19 @@ namespace KruBot
                 frmcreds.ShowDialog();
                 cred = JsonConvert.DeserializeObject<creds>(File.ReadAllText("creds.json"));
             }
-             
+            ChannelToMod = cred.channeltomod;
             //Loads our Twitch Credentials from the Json file.
             var credentials = new ConnectionCredentials(cred.username, cred.oauth);
-            client.Initialize(credentials, "pfckrutonium"); //Channel were connecting to.
+            client.Initialize(credentials, ChannelToMod); //Channel were connecting to.
             client.OnConnected += Client_OnConnected;
             client.OnJoinedChannel += Client_OnJoinedChannel;
             client.OnMessageReceived += Client_OnMessageReceived;
             client.Connect();
-            CefSettings settings = new CefSettings();
-            settings.CachePath = "./browsercache";
-            settings.PersistSessionCookies = true;
-            settings.PersistUserPreferences = true;
-            Cef.Initialize(settings);
-            var browser = new ChromiumWebBrowser("https://www.twitch.tv/popout/pfckrutonium/chat?popout=");
+            browser = new ChromiumWebBrowser("https://www.twitch.tv/popout/" + ChannelToMod + "/chat?popout=");
             browser.Dock = DockStyle.Fill;
             tbMusicVolume.MaximumSize = new System.Drawing.Size(tbMusicVolume.Width, 0);
             BrowserWindow.Controls.Add(browser);
-        }
-
-        private void RtbChat_LinkClicked(object sender, LinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start(e.LinkText); //Clicked Links need to do somthing. ANYTHING.
+            UpdateViewerList.Enabled = true;
         }
 
         private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
@@ -81,7 +94,7 @@ namespace KruBot
                     var url = ytLink[1];
                     if (url.ToUpper().Contains("YOUTUBE") == false && url.ToUpper().Contains("YOUTU.BE") == false)
                     {
-                        client.SendMessage("PFCKrutonium", "That's not a valid video");
+                        client.SendMessage(ChannelToMod, "That's not a valid video");
                         return;
                     }
                     var exists = qt.Any(x => x.ytlink.ToLower() == url.ToLower()); //Does any existing song request have the
@@ -106,7 +119,7 @@ namespace KruBot
 
         private void Client_OnJoinedChannel(object sender, OnJoinedChannelArgs e)
         {
-            client.SendMessage("pfckrutonium", "Successfully Joined");
+            //client.SendMessage(ChannelToMod, "Successfully Joined");
         }
 
         private void Client_OnConnected(object sender, OnConnectedArgs e)
@@ -153,34 +166,12 @@ namespace KruBot
                         lblTitle.Text = video.Title;
                         lblRequester.Text = songinfo.requester;
                         lblPlayerTime.Text = video.Duration.ToString();
-                        client.SendMessage("PFCKrutonium", "Playing " + video.Title);
+                        client.SendMessage(ChannelToMod, "Playing " + video.Title);
                     }
-                    catch { client.SendMessage("PFCKrutonium", "Song failed to play: " + songinfo.ytlink); }
+                    catch { client.SendMessage(ChannelToMod, "Song failed to play: " + songinfo.ytlink); }
                 }
             }
             processing = false;
-        }
-
-        private void btnSendMessage_Click(object sender, EventArgs e)
-        {
-            client.SendMessage(client.GetJoinedChannel("pfckrutonium"), tbMsg.Text);
-            if (tbMsg.Text.ToLower().StartsWith("!songrequest")) //I sent a song request through my bot
-                try //Since it doesn't see this by default, we handle it here instead.
-                {   //It doesn't care about duplicates in this code.
-                    var ytLink = tbMsg.Text.Split(' ');
-                    var p = new songreq
-                    {
-                        requester = "Me",
-                        ytlink = ytLink[1]
-                    };
-                    qt.Enqueue(p);
-                    client.SendMessage(client.GetJoinedChannel("pfckrutonium"),
-                        "Added " + GetVideoTitle(ytLink[1]) + " to Queue.");
-                }
-                catch
-                {
-                }
-            tbMsg.Text = "";
         }
 
         private void btnSkip_Click(object sender, EventArgs e)
@@ -192,6 +183,7 @@ namespace KruBot
         {
             public string oauth;
             public string username;
+            public string channeltomod;
             //This is an object used for Twitch Authentication
         }
 
@@ -233,7 +225,7 @@ namespace KruBot
         {
             UpdateViewerList.Interval = 60000;
             var wc = new WebClient();
-            var Viewers = JsonConvert.DeserializeObject<ViewerListJson>(wc.DownloadString("http://tmi.twitch.tv/group/user/pfckrutonium/chatters"));
+            var Viewers = JsonConvert.DeserializeObject<ViewerListJson>(wc.DownloadString("http://tmi.twitch.tv/group/user/"+ChannelToMod+"/chatters"));
             lbViewers.Items.Clear();
 
             if(Viewers.chatters.admins.Count > 0)
@@ -241,27 +233,45 @@ namespace KruBot
                 lbViewers.Items.Add("Admins:");
                 lbViewers.Items.AddRange(Viewers.chatters.admins.ToArray());
                 lbViewers.Items.AddRange(Viewers.chatters.staff.ToArray());
+                lbViewers.Items.Add("");
             }
             if(Viewers.chatters.global_mods.Count > 0)
             {
                 lbViewers.Items.Add("Global Moderators:");
                 lbViewers.Items.AddRange(Viewers.chatters.global_mods.ToArray());
+                lbViewers.Items.Add("");
             }
             if(Viewers.chatters.moderators.Count > 0)
             {
                 lbViewers.Items.Add("Moderators:");
                 lbViewers.Items.AddRange(Viewers.chatters.moderators.ToArray());
+                lbViewers.Items.Add("");
             }
             if(Viewers.chatters.vips.Count > 0)
             {
                 lbViewers.Items.Add("VIP:");
                 lbViewers.Items.AddRange(Viewers.chatters.vips.ToArray());
+                lbViewers.Items.Add("");
             }
             if(Viewers.chatters.viewers.Count > 0)
             {
                 lbViewers.Items.Add("Viewers:");
                 lbViewers.Items.AddRange(Viewers.chatters.viewers.ToArray());
+                lbViewers.Items.Add("");
             }
+        }
+
+        private void CmdReAuthenticate_Click(object sender, EventArgs e)
+        {
+            File.Move("./creds.json", "creds.json.old");
+            frmCredentials creds = new frmCredentials();
+            
+            creds.ShowDialog();
+            if (File.Exists("creds.json"))
+            {
+                File.Delete("creds.json.old");
+            }
+            MessageBox.Show("Restart the bot for the changes to take effect.");
         }
     }
 }

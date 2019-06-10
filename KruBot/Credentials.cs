@@ -9,10 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using System.IO;
+using CefSharp;
+using CefSharp.WinForms;
+
 namespace KruBot
 {
     public partial class frmCredentials : Form
     {
+        public static ChromiumWebBrowser browser;
         public frmCredentials()
         {
             InitializeComponent();
@@ -20,7 +24,7 @@ namespace KruBot
 
         private void CmdGetOauth_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://twitchapps.com/tmi/");
+            //System.Diagnostics.Process.Start("https://twitchapps.com/tmi/");
         }
 
         private void CmdSave_Click(object sender, EventArgs e)
@@ -28,6 +32,7 @@ namespace KruBot
             var creds = new creds();
             creds.username = tbAccountName.Text;
             creds.oauth = tbOauth.Text;
+            creds.channeltomod = tbChannelName.Text;
             File.WriteAllText("creds.json", JsonConvert.SerializeObject(creds, Formatting.Indented));
             System.Threading.Thread.Sleep(1000);
             this.Close();
@@ -35,12 +40,17 @@ namespace KruBot
 
         private void FrmCredentials_Load(object sender, EventArgs e)
         {
-            
+            browser = new ChromiumWebBrowser("https://twitchapps.com/tmi/");
+            browser.Dock = DockStyle.Fill;
+            gbAuth.Controls.Add(browser);
+            this.MaximumSize = this.Size;
+            this.MinimumSize = this.Size;
         }
         public class creds
         {
             public string oauth;
             public string username;
+            public string channeltomod;
             //This is an object used for Twitch Authentication
         }
     }

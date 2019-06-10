@@ -32,21 +32,23 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tbAccountName = new System.Windows.Forms.TextBox();
-            this.cmdGetOauth = new System.Windows.Forms.Button();
             this.cmdSave = new System.Windows.Forms.Button();
+            this.gbAuth = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbChannelName = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // tbOauth
             // 
-            this.tbOauth.Location = new System.Drawing.Point(124, 12);
+            this.tbOauth.Location = new System.Drawing.Point(153, 11);
             this.tbOauth.Name = "tbOauth";
-            this.tbOauth.Size = new System.Drawing.Size(298, 20);
+            this.tbOauth.Size = new System.Drawing.Size(484, 20);
             this.tbOauth.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 15);
+            this.label1.Location = new System.Drawing.Point(72, 14);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(72, 13);
             this.label1.TabIndex = 1;
@@ -55,7 +57,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 49);
+            this.label2.Location = new System.Drawing.Point(35, 40);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(109, 13);
             this.label2.TabIndex = 2;
@@ -63,24 +65,14 @@
             // 
             // tbAccountName
             // 
-            this.tbAccountName.Location = new System.Drawing.Point(124, 46);
+            this.tbAccountName.Location = new System.Drawing.Point(153, 37);
             this.tbAccountName.Name = "tbAccountName";
-            this.tbAccountName.Size = new System.Drawing.Size(298, 20);
+            this.tbAccountName.Size = new System.Drawing.Size(484, 20);
             this.tbAccountName.TabIndex = 3;
-            // 
-            // cmdGetOauth
-            // 
-            this.cmdGetOauth.Location = new System.Drawing.Point(428, 10);
-            this.cmdGetOauth.Name = "cmdGetOauth";
-            this.cmdGetOauth.Size = new System.Drawing.Size(75, 23);
-            this.cmdGetOauth.TabIndex = 4;
-            this.cmdGetOauth.Text = "Get";
-            this.cmdGetOauth.UseVisualStyleBackColor = true;
-            this.cmdGetOauth.Click += new System.EventHandler(this.CmdGetOauth_Click);
             // 
             // cmdSave
             // 
-            this.cmdSave.Location = new System.Drawing.Point(428, 44);
+            this.cmdSave.Location = new System.Drawing.Point(286, 89);
             this.cmdSave.Name = "cmdSave";
             this.cmdSave.Size = new System.Drawing.Size(75, 23);
             this.cmdSave.TabIndex = 5;
@@ -88,13 +80,40 @@
             this.cmdSave.UseVisualStyleBackColor = true;
             this.cmdSave.Click += new System.EventHandler(this.CmdSave_Click);
             // 
+            // gbAuth
+            // 
+            this.gbAuth.Location = new System.Drawing.Point(12, 133);
+            this.gbAuth.Name = "gbAuth";
+            this.gbAuth.Size = new System.Drawing.Size(625, 431);
+            this.gbAuth.TabIndex = 6;
+            this.gbAuth.TabStop = false;
+            this.gbAuth.Text = "Authenticate Here as your Bot (not implemented yet)";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(9, 63);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(135, 13);
+            this.label3.TabIndex = 7;
+            this.label3.Text = "Channel name to Moderate";
+            // 
+            // tbChannelName
+            // 
+            this.tbChannelName.Location = new System.Drawing.Point(153, 63);
+            this.tbChannelName.Name = "tbChannelName";
+            this.tbChannelName.Size = new System.Drawing.Size(484, 20);
+            this.tbChannelName.TabIndex = 8;
+            // 
             // frmCredentials
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(508, 85);
+            this.ClientSize = new System.Drawing.Size(649, 576);
+            this.Controls.Add(this.tbChannelName);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.gbAuth);
             this.Controls.Add(this.cmdSave);
-            this.Controls.Add(this.cmdGetOauth);
             this.Controls.Add(this.tbAccountName);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -113,7 +132,9 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbAccountName;
-        private System.Windows.Forms.Button cmdGetOauth;
         private System.Windows.Forms.Button cmdSave;
+        private System.Windows.Forms.GroupBox gbAuth;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox tbChannelName;
     }
 }
