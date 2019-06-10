@@ -38,21 +38,23 @@
             this.btnSkip = new System.Windows.Forms.Button();
             this.SidePanel = new System.Windows.Forms.TableLayoutPanel();
             this.tbMusicVolume = new System.Windows.Forms.TrackBar();
-            this.tblInfo = new System.Windows.Forms.TableLayoutPanel();
-            this.lblTitle = new System.Windows.Forms.Label();
-            this.lblRequester = new System.Windows.Forms.Label();
-            this.lblPlayerTime = new System.Windows.Forms.Label();
             this.tabSettings = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.SongStarter = new System.Windows.Forms.Timer(this.components);
+            this.UpdateViewerList = new System.Windows.Forms.Timer(this.components);
+            this.lblRequester = new System.Windows.Forms.Label();
+            this.lblPlayerTime = new System.Windows.Forms.Label();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.tblInfo = new System.Windows.Forms.TableLayoutPanel();
+            this.lbViewers = new System.Windows.Forms.ListBox();
             this.TabControl.SuspendLayout();
             this.tabChat.SuspendLayout();
             this.BrowserWindow.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.SidePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbMusicVolume)).BeginInit();
-            this.tblInfo.SuspendLayout();
             this.tabSettings.SuspendLayout();
+            this.tblInfo.SuspendLayout();
             this.SuspendLayout();
             // 
             // TabControl
@@ -164,51 +166,6 @@
             this.tbMusicVolume.Value = 70;
             this.tbMusicVolume.Scroll += new System.EventHandler(this.tbMusicVolume_Scroll_1);
             // 
-            // tblInfo
-            // 
-            this.tblInfo.ColumnCount = 1;
-            this.tblInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tblInfo.Controls.Add(this.lblTitle, 0, 3);
-            this.tblInfo.Controls.Add(this.lblRequester, 0, 2);
-            this.tblInfo.Controls.Add(this.lblPlayerTime, 0, 1);
-            this.tblInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tblInfo.Location = new System.Drawing.Point(56, 3);
-            this.tblInfo.Name = "tblInfo";
-            this.tblInfo.RowCount = 4;
-            this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
-            this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
-            this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
-            this.tblInfo.Size = new System.Drawing.Size(131, 417);
-            this.tblInfo.TabIndex = 3;
-            // 
-            // lblTitle
-            // 
-            this.lblTitle.AutoSize = true;
-            this.lblTitle.Location = new System.Drawing.Point(3, 400);
-            this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(55, 13);
-            this.lblTitle.TabIndex = 4;
-            this.lblTitle.Text = "Song Title";
-            // 
-            // lblRequester
-            // 
-            this.lblRequester.AutoSize = true;
-            this.lblRequester.Location = new System.Drawing.Point(3, 383);
-            this.lblRequester.Name = "lblRequester";
-            this.lblRequester.Size = new System.Drawing.Size(56, 13);
-            this.lblRequester.TabIndex = 3;
-            this.lblRequester.Text = "Requester";
-            // 
-            // lblPlayerTime
-            // 
-            this.lblPlayerTime.AutoSize = true;
-            this.lblPlayerTime.Location = new System.Drawing.Point(3, 360);
-            this.lblPlayerTime.Name = "lblPlayerTime";
-            this.lblPlayerTime.Size = new System.Drawing.Size(70, 13);
-            this.lblPlayerTime.TabIndex = 2;
-            this.lblPlayerTime.Text = "Current Time:";
-            // 
             // tabSettings
             // 
             this.tabSettings.Controls.Add(this.tableLayoutPanel3);
@@ -239,6 +196,66 @@
             this.SongStarter.Interval = 200;
             this.SongStarter.Tick += new System.EventHandler(this.SongStarter_Tick);
             // 
+            // UpdateViewerList
+            // 
+            this.UpdateViewerList.Enabled = true;
+            this.UpdateViewerList.Tick += new System.EventHandler(this.UpdateViewerList_Tick);
+            // 
+            // lblRequester
+            // 
+            this.lblRequester.AutoSize = true;
+            this.lblRequester.Location = new System.Drawing.Point(3, 366);
+            this.lblRequester.Name = "lblRequester";
+            this.lblRequester.Size = new System.Drawing.Size(56, 13);
+            this.lblRequester.TabIndex = 3;
+            this.lblRequester.Text = "Requester";
+            // 
+            // lblPlayerTime
+            // 
+            this.lblPlayerTime.AutoSize = true;
+            this.lblPlayerTime.Location = new System.Drawing.Point(3, 383);
+            this.lblPlayerTime.Name = "lblPlayerTime";
+            this.lblPlayerTime.Size = new System.Drawing.Size(70, 13);
+            this.lblPlayerTime.TabIndex = 2;
+            this.lblPlayerTime.Text = "Current Time:";
+            // 
+            // lblTitle
+            // 
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.Location = new System.Drawing.Point(3, 400);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(55, 13);
+            this.lblTitle.TabIndex = 4;
+            this.lblTitle.Text = "Song Title";
+            // 
+            // tblInfo
+            // 
+            this.tblInfo.ColumnCount = 1;
+            this.tblInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tblInfo.Controls.Add(this.lblTitle, 0, 3);
+            this.tblInfo.Controls.Add(this.lblPlayerTime, 0, 2);
+            this.tblInfo.Controls.Add(this.lblRequester, 0, 1);
+            this.tblInfo.Controls.Add(this.lbViewers, 0, 0);
+            this.tblInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tblInfo.Location = new System.Drawing.Point(56, 3);
+            this.tblInfo.Name = "tblInfo";
+            this.tblInfo.RowCount = 4;
+            this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
+            this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
+            this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 17F));
+            this.tblInfo.Size = new System.Drawing.Size(131, 417);
+            this.tblInfo.TabIndex = 3;
+            // 
+            // lbViewers
+            // 
+            this.lbViewers.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lbViewers.FormattingEnabled = true;
+            this.lbViewers.Location = new System.Drawing.Point(3, 3);
+            this.lbViewers.Name = "lbViewers";
+            this.lbViewers.Size = new System.Drawing.Size(125, 360);
+            this.lbViewers.TabIndex = 5;
+            // 
             // frmKruBot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -256,9 +273,9 @@
             this.SidePanel.ResumeLayout(false);
             this.SidePanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbMusicVolume)).EndInit();
+            this.tabSettings.ResumeLayout(false);
             this.tblInfo.ResumeLayout(false);
             this.tblInfo.PerformLayout();
-            this.tabSettings.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -280,12 +297,14 @@
         private System.Windows.Forms.Button btnSkip;
         private System.Windows.Forms.TableLayoutPanel SidePanel;
         private System.Windows.Forms.TrackBar tbMusicVolume;
-        private System.Windows.Forms.TableLayoutPanel tblInfo;
-        private System.Windows.Forms.Label lblPlayerTime;
-        private System.Windows.Forms.Label lblRequester;
-        private System.Windows.Forms.Label lblTitle;
         private System.Windows.Forms.TabPage tabSettings;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.Timer UpdateViewerList;
+        private System.Windows.Forms.TableLayoutPanel tblInfo;
+        private System.Windows.Forms.Label lblTitle;
+        private System.Windows.Forms.Label lblPlayerTime;
+        private System.Windows.Forms.Label lblRequester;
+        private System.Windows.Forms.ListBox lbViewers;
     }
 }
 

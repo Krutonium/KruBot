@@ -13,6 +13,9 @@ using YoutubeExplode.Models.MediaStreams;
 using NAudio;
 using NAudio.Wave;
 using CefSharp.WinForms;
+using CefSharp;
+using TwitchLib.Api;
+using System.Net;
 
 //TODO:
 // Capture More Information from Song Requests for Display ✔
@@ -53,10 +56,13 @@ namespace KruBot
             client.Connect();
             CefSettings settings = new CefSettings();
             settings.CachePath = "./browsercache";
+            settings.PersistSessionCookies = true;
+            settings.PersistUserPreferences = true;
+            Cef.Initialize(settings);
             var browser = new ChromiumWebBrowser("https://www.twitch.tv/popout/pfckrutonium/chat?popout=");
             browser.Dock = DockStyle.Fill;
+            tbMusicVolume.MaximumSize = new System.Drawing.Size(tbMusicVolume.Width, 0);
             BrowserWindow.Controls.Add(browser);
-
         }
 
         private void RtbChat_LinkClicked(object sender, LinkClickedEventArgs e)
@@ -200,6 +206,62 @@ namespace KruBot
         {
             //Make the volume slider functional.
             OutputDevice.Volume = (float)tbMusicVolume.Value /100;
+        }
+        public class Links
+        {
+        }
+
+        public class Chatters
+        {
+            public IList<string> broadcaster { get; set; }
+            public IList<string> vips { get; set; }
+            public IList<string> moderators { get; set; }
+            public IList<object> staff { get; set; }
+            public IList<object> admins { get; set; }
+            public IList<object> global_mods { get; set; }
+            public IList<string> viewers { get; set; }
+        }
+
+        public class ViewerListJson
+        {
+            public Links _links { get; set; }
+            public int chatter_count { get; set; }
+            public Chatters chatters { get; set; }
+        }
+
+        private void UpdateViewerList_Tick(object sender, EventArgs e)
+        {
+            UpdateViewerList.Interval = 60000;
+            var wc = new WebClient();
+            var Viewers = JsonConvert.DeserializeObject<ViewerListJson>(wc.DownloadString("http://tmi.twitch.tv/group/user/pfckrutonium/chatters"));
+            lbViewers.Items.Clear();
+
+            if(Viewers.chatters.admins.Count > 0)
+            {
+                lbViewers.Items.Add("Admins:");
+                lbViewers.Items.AddRange(Viewers.chatters.admins.ToArray());
+                lbViewers.Items.AddRange(Viewers.chatters.staff.ToArray());
+            }
+            if(Viewers.chatters.global_mods.Count > 0)
+            {
+                lbViewers.Items.Add("Global Moderators:");
+                lbViewers.Items.AddRange(Viewers.chatters.global_mods.ToArray());
+            }
+            if(Viewers.chatters.moderators.Count > 0)
+            {
+                lbViewers.Items.Add("Moderators:");
+                lbViewers.Items.AddRange(Viewers.chatters.moderators.ToArray());
+            }
+            if(Viewers.chatters.vips.Count > 0)
+            {
+                lbViewers.Items.Add("VIP:");
+                lbViewers.Items.AddRange(Viewers.chatters.vips.ToArray());
+            }
+            if(Viewers.chatters.viewers.Count > 0)
+            {
+                lbViewers.Items.Add("Viewers:");
+                lbViewers.Items.AddRange(Viewers.chatters.viewers.ToArray());
+            }
         }
     }
 }
