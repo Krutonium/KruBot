@@ -36,6 +36,7 @@
             this.gbAuth = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.tbChannelName = new System.Windows.Forms.TextBox();
+            this.btnClearCookies = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tbOauth
@@ -72,7 +73,7 @@
             // 
             // cmdSave
             // 
-            this.cmdSave.Location = new System.Drawing.Point(286, 89);
+            this.cmdSave.Location = new System.Drawing.Point(562, 89);
             this.cmdSave.Name = "cmdSave";
             this.cmdSave.Size = new System.Drawing.Size(75, 23);
             this.cmdSave.TabIndex = 5;
@@ -105,11 +106,22 @@
             this.tbChannelName.Size = new System.Drawing.Size(484, 20);
             this.tbChannelName.TabIndex = 8;
             // 
+            // btnClearCookies
+            // 
+            this.btnClearCookies.Location = new System.Drawing.Point(457, 89);
+            this.btnClearCookies.Name = "btnClearCookies";
+            this.btnClearCookies.Size = new System.Drawing.Size(99, 23);
+            this.btnClearCookies.TabIndex = 9;
+            this.btnClearCookies.Text = "Clear Cookies";
+            this.btnClearCookies.UseVisualStyleBackColor = true;
+            this.btnClearCookies.Click += new System.EventHandler(this.BtnClearCookies_Click);
+            // 
             // frmCredentials
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(649, 576);
+            this.Controls.Add(this.btnClearCookies);
             this.Controls.Add(this.tbChannelName);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.gbAuth);
@@ -136,5 +148,6 @@
         private System.Windows.Forms.GroupBox gbAuth;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbChannelName;
+        private System.Windows.Forms.Button btnClearCookies;
     }
 }

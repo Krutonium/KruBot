@@ -30,7 +30,9 @@ namespace KruBot
         public static Queue<songreq> qt = new Queue<songreq>();
         public static WaveOutEvent OutputDevice = new WaveOutEvent();
         public static string ChannelToMod;
+
         public static ChromiumWebBrowser browser;
+        public static ConnectionCredentials credentials;
         public frmKruBot()
         {
             InitializeComponent();
@@ -70,7 +72,7 @@ namespace KruBot
             }
             ChannelToMod = cred.channeltomod;
             //Loads our Twitch Credentials from the Json file.
-            var credentials = new ConnectionCredentials(cred.username, cred.oauth);
+            credentials = new ConnectionCredentials(cred.username, cred.oauth);
             client.Initialize(credentials, ChannelToMod); //Channel were connecting to.
             client.OnConnected += Client_OnConnected;
             client.OnJoinedChannel += Client_OnJoinedChannel;
@@ -257,21 +259,23 @@ namespace KruBot
             {
                 lbViewers.Items.Add("Viewers:");
                 lbViewers.Items.AddRange(Viewers.chatters.viewers.ToArray());
-                lbViewers.Items.Add("");
             }
         }
 
         private void CmdReAuthenticate_Click(object sender, EventArgs e)
         {
             File.Move("./creds.json", "creds.json.old");
-            frmCredentials creds = new frmCredentials();
-            
-            creds.ShowDialog();
+            frmCredentials credForm = new frmCredentials();
+            credForm.ShowDialog();
             if (File.Exists("creds.json"))
             {
                 File.Delete("creds.json.old");
             }
-            MessageBox.Show("Restart the bot for the changes to take effect.");
+            //MessageBox.Show("Restart the bot for the changes to take effect.");
+            var tempvars = JsonConvert.DeserializeObject<creds>(File.ReadAllText("creds.json"));
+            ChannelToMod = tempvars.channeltomod;
+            browser.Load("https://www.twitch.tv/popout/" + ChannelToMod + "/chat?popout=");
+            UpdateViewerList.Interval = 1;
         }
     }
 }
