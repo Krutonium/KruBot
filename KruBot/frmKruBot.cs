@@ -169,9 +169,16 @@ namespace KruBot
                         lblRequester.Text = songinfo.requester;
                         lblPlayerTime.Text = video.Duration.ToString();
                         client.SendMessage(ChannelToMod, "Playing " + video.Title);
+                        File.WriteAllText("./SongTitle.txt", "Now Playing: " + video.Title);
+                        File.WriteAllText("./Requester.txt", "Requested by: "  + songinfo.requester);  
                     }
                     catch { client.SendMessage(ChannelToMod, "Song failed to play: " + songinfo.ytlink); }
                 }
+            }
+            if(qt.Count == 0 && OutputDevice.PlaybackState == PlaybackState.Stopped)
+            {
+                File.WriteAllText("./SongTitle.txt", "");
+                File.WriteAllText("./Requester.txt", "");
             }
             processing = false;
         }

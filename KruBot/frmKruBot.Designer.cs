@@ -32,22 +32,22 @@
             this.TabControl = new System.Windows.Forms.TabControl();
             this.tabChat = new System.Windows.Forms.TabPage();
             this.BrowserWindow = new System.Windows.Forms.TableLayoutPanel();
-            this.btnSkip = new System.Windows.Forms.Button();
             this.SidePanel = new System.Windows.Forms.TableLayoutPanel();
             this.tbMusicVolume = new System.Windows.Forms.TrackBar();
             this.tblInfo = new System.Windows.Forms.TableLayoutPanel();
+            this.btnSkip = new System.Windows.Forms.Button();
             this.lblTitle = new System.Windows.Forms.Label();
             this.lblPlayerTime = new System.Windows.Forms.Label();
             this.lblRequester = new System.Windows.Forms.Label();
             this.lbViewers = new System.Windows.Forms.ListBox();
             this.tabSettings = new System.Windows.Forms.TabPage();
-            this.SongStarter = new System.Windows.Forms.Timer(this.components);
-            this.UpdateViewerList = new System.Windows.Forms.Timer(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.gbSettings = new System.Windows.Forms.GroupBox();
             this.cmdReAuthenticate = new System.Windows.Forms.Button();
             this.gbStreamSettings = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.SongStarter = new System.Windows.Forms.Timer(this.components);
+            this.UpdateViewerList = new System.Windows.Forms.Timer(this.components);
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.TabControl.SuspendLayout();
             this.tabChat.SuspendLayout();
             this.BrowserWindow.SuspendLayout();
@@ -60,7 +60,6 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.gbSettings.SuspendLayout();
-            this.gbStreamSettings.SuspendLayout();
             this.SuspendLayout();
             // 
             // TabControl
@@ -99,16 +98,6 @@
             this.BrowserWindow.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 7.939914F));
             this.BrowserWindow.Size = new System.Drawing.Size(803, 466);
             this.BrowserWindow.TabIndex = 1;
-            // 
-            // btnSkip
-            // 
-            this.btnSkip.Location = new System.Drawing.Point(3, 428);
-            this.btnSkip.Name = "btnSkip";
-            this.btnSkip.Size = new System.Drawing.Size(75, 23);
-            this.btnSkip.TabIndex = 4;
-            this.btnSkip.Text = "Skip";
-            this.btnSkip.UseVisualStyleBackColor = true;
-            this.btnSkip.Click += new System.EventHandler(this.btnSkip_Click);
             // 
             // SidePanel
             // 
@@ -158,6 +147,16 @@
             this.tblInfo.Size = new System.Drawing.Size(131, 454);
             this.tblInfo.TabIndex = 3;
             // 
+            // btnSkip
+            // 
+            this.btnSkip.Location = new System.Drawing.Point(3, 428);
+            this.btnSkip.Name = "btnSkip";
+            this.btnSkip.Size = new System.Drawing.Size(75, 23);
+            this.btnSkip.TabIndex = 4;
+            this.btnSkip.Text = "Skip";
+            this.btnSkip.UseVisualStyleBackColor = true;
+            this.btnSkip.Click += new System.EventHandler(this.btnSkip_Click);
+            // 
             // lblTitle
             // 
             this.lblTitle.AutoSize = true;
@@ -204,16 +203,6 @@
             this.tabSettings.Text = "Settings";
             this.tabSettings.UseVisualStyleBackColor = true;
             // 
-            // SongStarter
-            // 
-            this.SongStarter.Enabled = true;
-            this.SongStarter.Interval = 200;
-            this.SongStarter.Tick += new System.EventHandler(this.SongStarter_Tick);
-            // 
-            // UpdateViewerList
-            // 
-            this.UpdateViewerList.Tick += new System.EventHandler(this.UpdateViewerList_Tick);
-            // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -254,7 +243,6 @@
             // 
             // gbStreamSettings
             // 
-            this.gbStreamSettings.Controls.Add(this.label1);
             this.gbStreamSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbStreamSettings.Location = new System.Drawing.Point(0, 0);
             this.gbStreamSettings.Name = "gbStreamSettings";
@@ -263,14 +251,15 @@
             this.gbStreamSettings.TabStop = false;
             this.gbStreamSettings.Text = "Stream Settings";
             // 
-            // label1
+            // SongStarter
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 19);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(297, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Your Bot must be an Editor for your channel for these to work.";
+            this.SongStarter.Enabled = true;
+            this.SongStarter.Interval = 200;
+            this.SongStarter.Tick += new System.EventHandler(this.SongStarter_Tick);
+            // 
+            // UpdateViewerList
+            // 
+            this.UpdateViewerList.Tick += new System.EventHandler(this.UpdateViewerList_Tick);
             // 
             // frmKruBot
             // 
@@ -295,8 +284,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.gbSettings.ResumeLayout(false);
-            this.gbStreamSettings.ResumeLayout(false);
-            this.gbStreamSettings.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -326,7 +313,7 @@
         private System.Windows.Forms.GroupBox gbSettings;
         private System.Windows.Forms.Button cmdReAuthenticate;
         private System.Windows.Forms.GroupBox gbStreamSettings;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
     }
 }
 
