@@ -83,6 +83,25 @@ namespace KruBot
             tbMusicVolume.MaximumSize = new System.Drawing.Size(tbMusicVolume.Width, 0);
             BrowserWindow.Controls.Add(browser);
             UpdateViewerList.Enabled = true;
+            
+            client.OnDisconnected += Client_OnDisconnected;
+            client.OnReconnected += Client_OnReconnected;
+            browser.AddressChanged += Browser_AddressChanged;
+            ResetConnection.Enabled = true;
+        }
+        private void Browser_AddressChanged(object sender, AddressChangedEventArgs e)
+        {
+            browser.ExecuteScriptAsyncWhenPageLoaded(new WebClient().DownloadString("https://cdn.frankerfacez.com/script/ffz_injector.user.js"));
+        }
+
+        private void Client_OnReconnected(object sender, TwitchLib.Communication.Events.OnReconnectedEventArgs e)
+        {
+            client.SendMessage(ChannelToMod,"Reconnected to Chat");
+        }
+
+        private void Client_OnDisconnected(object sender, TwitchLib.Communication.Events.OnDisconnectedEventArgs e)
+        {
+            //client.Reconnect();
         }
 
         private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
@@ -146,7 +165,6 @@ namespace KruBot
         static bool processing = false;
         private void SongStarter_Tick(object sender, EventArgs e)
         {
-
             if (qt.Count > 0 && processing == false)
             {
                 processing = true;
@@ -283,6 +301,14 @@ namespace KruBot
             ChannelToMod = tempvars.channeltomod;
             browser.Load("https://www.twitch.tv/popout/" + ChannelToMod + "/chat?popout=");
             UpdateViewerList.Interval = 1;
+        }
+
+        private void ResetConnection_Tick(object sender, EventArgs e)
+        {
+            //This works around an issue with Twitch where the IRC Client gets randomly disconnected.,
+
+            client.Disconnect();
+            client.Connect();
         }
     }
 }

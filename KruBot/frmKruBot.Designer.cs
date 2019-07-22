@@ -48,6 +48,7 @@
             this.SongStarter = new System.Windows.Forms.Timer(this.components);
             this.UpdateViewerList = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.ResetConnection = new System.Windows.Forms.Timer(this.components);
             this.TabControl.SuspendLayout();
             this.tabChat.SuspendLayout();
             this.BrowserWindow.SuspendLayout();
@@ -261,6 +262,11 @@
             // 
             this.UpdateViewerList.Tick += new System.EventHandler(this.UpdateViewerList_Tick);
             // 
+            // ResetConnection
+            // 
+            this.ResetConnection.Interval = 60000;
+            this.ResetConnection.Tick += new System.EventHandler(this.ResetConnection_Tick);
+            // 
             // frmKruBot
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -314,6 +320,7 @@
         private System.Windows.Forms.Button cmdReAuthenticate;
         private System.Windows.Forms.GroupBox gbStreamSettings;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private System.Windows.Forms.Timer ResetConnection;
     }
 }
 
