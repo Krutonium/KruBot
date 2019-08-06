@@ -128,14 +128,34 @@ namespace KruBot
                         var p = new songreq();
                         p.requester = e.ChatMessage.Username;
                         p.ytlink = ytLink[1];
+                        p.name = GetVideoTitle(ytLink[1]);
                         qt.Enqueue(p);
-                        client.SendMessage(e.ChatMessage.Channel, "Added " + GetVideoTitle(ytLink[1]) + " to Queue.");
+                        client.SendMessage(e.ChatMessage.Channel, "Added " + p.name + " to Queue.");
                         //Added song to the Queue.
                     }
                 }
                 catch
                 {
                 }
+            if (e.ChatMessage.Message.ToUpper() == "!LIST")
+            {
+                List<songreq> songlist = qt.ToList<songreq>();
+                //string Queue = "Songs in Queue:" + Environment.NewLine;
+                client.SendWhisper(e.ChatMessage.Username, "Queue");
+                if (songlist.Count > 0)
+                {
+                    foreach(var song in songlist)
+                    {
+
+                        client.SendWhisper(e.ChatMessage.Username, song.name);
+                        //Queue += song.name + Environment.NewLine;
+                    } 
+                } else
+                {
+                    //Queue = "No Songs in Queue";
+                }
+                
+            }
         }
 
         private void Client_OnJoinedChannel(object sender, OnJoinedChannelArgs e)
@@ -190,7 +210,7 @@ namespace KruBot
                         File.WriteAllText("./SongTitle.txt", "Now Playing: " + video.Title);
                         File.WriteAllText("./Requester.txt", "Requested by: "  + songinfo.requester);  
                     }
-                    catch { client.SendMessage(ChannelToMod, "Song failed to play: " + songinfo.ytlink); }
+                    catch { client.SendMessage(ChannelToMod, "Song failed to play: " + songinfo.name); }
                 }
             }
             if(qt.Count == 0 && OutputDevice.PlaybackState == PlaybackState.Stopped)
@@ -218,6 +238,7 @@ namespace KruBot
         {
             public string requester;
             public string ytlink;
+            public string name;
             //Information that is stored in the queue. More can be added easily.
         }
 
