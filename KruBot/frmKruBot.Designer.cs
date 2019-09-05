@@ -49,6 +49,10 @@
             this.UpdateViewerList = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.ResetConnection = new System.Windows.Forms.Timer(this.components);
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.gbAlerts = new System.Windows.Forms.GroupBox();
+            this.tbAlertURL = new System.Windows.Forms.TextBox();
+            this.btnSaveAlert = new System.Windows.Forms.Button();
             this.TabControl.SuspendLayout();
             this.tabChat.SuspendLayout();
             this.BrowserWindow.SuspendLayout();
@@ -61,12 +65,15 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.gbSettings.SuspendLayout();
+            this.gbStreamSettings.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // TabControl
             // 
             this.TabControl.Controls.Add(this.tabChat);
             this.TabControl.Controls.Add(this.tabSettings);
+            this.TabControl.Controls.Add(this.tabPage1);
             this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl.Location = new System.Drawing.Point(0, 0);
             this.TabControl.Name = "TabControl";
@@ -244,6 +251,8 @@
             // 
             // gbStreamSettings
             // 
+            this.gbStreamSettings.Controls.Add(this.btnSaveAlert);
+            this.gbStreamSettings.Controls.Add(this.tbAlertURL);
             this.gbStreamSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gbStreamSettings.Location = new System.Drawing.Point(0, 0);
             this.gbStreamSettings.Name = "gbStreamSettings";
@@ -266,6 +275,43 @@
             // 
             this.ResetConnection.Interval = 60000;
             this.ResetConnection.Tick += new System.EventHandler(this.ResetConnection_Tick);
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.gbAlerts);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Size = new System.Drawing.Size(809, 472);
+            this.tabPage1.TabIndex = 3;
+            this.tabPage1.Text = "Alerts";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // gbAlerts
+            // 
+            this.gbAlerts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gbAlerts.Location = new System.Drawing.Point(0, 0);
+            this.gbAlerts.Name = "gbAlerts";
+            this.gbAlerts.Size = new System.Drawing.Size(809, 472);
+            this.gbAlerts.TabIndex = 0;
+            this.gbAlerts.TabStop = false;
+            this.gbAlerts.Text = "Alerts";
+            // 
+            // tbAlertURL
+            // 
+            this.tbAlertURL.Location = new System.Drawing.Point(128, 19);
+            this.tbAlertURL.Name = "tbAlertURL";
+            this.tbAlertURL.Size = new System.Drawing.Size(400, 20);
+            this.tbAlertURL.TabIndex = 0;
+            // 
+            // btnSaveAlert
+            // 
+            this.btnSaveAlert.Location = new System.Drawing.Point(6, 19);
+            this.btnSaveAlert.Name = "btnSaveAlert";
+            this.btnSaveAlert.Size = new System.Drawing.Size(116, 23);
+            this.btnSaveAlert.TabIndex = 1;
+            this.btnSaveAlert.Text = "Save Alert URL";
+            this.btnSaveAlert.UseVisualStyleBackColor = true;
+            this.btnSaveAlert.Click += new System.EventHandler(this.BtnSaveAlert_Click);
             // 
             // frmKruBot
             // 
@@ -290,6 +336,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.gbSettings.ResumeLayout(false);
+            this.gbStreamSettings.ResumeLayout(false);
+            this.gbStreamSettings.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -321,6 +370,10 @@
         private System.Windows.Forms.GroupBox gbStreamSettings;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.Timer ResetConnection;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.GroupBox gbAlerts;
+        private System.Windows.Forms.Button btnSaveAlert;
+        private System.Windows.Forms.TextBox tbAlertURL;
     }
 }
 

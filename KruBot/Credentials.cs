@@ -51,6 +51,7 @@ namespace KruBot
             public string oauth;
             public string username;
             public string channeltomod;
+            public string alertsURL;
             //This is an object used for Twitch Authentication
         }
 

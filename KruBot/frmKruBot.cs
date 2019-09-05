@@ -30,9 +30,10 @@ namespace KruBot
         public static Queue<songreq> qt = new Queue<songreq>();
         public static WaveOutEvent OutputDevice = new WaveOutEvent();
         public static string ChannelToMod;
-
+        public static creds cred = new creds();
         public static ChromiumWebBrowser browser;
         public static ConnectionCredentials credentials;
+        public static Currency currency = new Currency();
         public frmKruBot()
         {
             InitializeComponent();
@@ -53,14 +54,25 @@ namespace KruBot
                     File.Delete("creds.json.old");
                 }
             }
-
+            if (File.Exists("ChatCurrency.json"))
+            {
+                currency = JsonConvert.DeserializeObject<Currency>(File.ReadAllText("ChatCurrency.json"));
+            } else
+            {
+                currency = new Currency();
+                currency.CurrencyName = "Krutons";
+                currency.CurrencySymbol = "K";
+                currency.users = new List<KeyValuePair<string, int>>();
+                currency.users.Add(new KeyValuePair<string, int>("PFCKrutonium", 1));
+            }
 
             CefSettings settings = new CefSettings();
             settings.CachePath = "./browsercache";
             settings.PersistSessionCookies = true;
             settings.PersistUserPreferences = true;
+            settings.CefCommandLineArgs.Add("autoplay-policy", "no-user-gesture-required");
             Cef.Initialize(settings);
-            var cred = new creds();
+            
             if (File.Exists("creds.json"))
             {
                 cred = JsonConvert.DeserializeObject<creds>(File.ReadAllText("creds.json"));
@@ -88,6 +100,9 @@ namespace KruBot
             client.OnReconnected += Client_OnReconnected;
             browser.AddressChanged += Browser_AddressChanged;
             ResetConnection.Enabled = true;
+            var tmpBrowser = new ChromiumWebBrowser(cred.alertsURL);
+            gbAlerts.Controls.Add(tmpBrowser);
+
         }
         private void Browser_AddressChanged(object sender, AddressChangedEventArgs e)
         {
@@ -103,6 +118,47 @@ namespace KruBot
         {
             //client.Reconnect();
         }
+
+        private void GiveCurrency(string Username, int Amount)
+        {
+            int indexx = -1;
+            int index = 0;
+            foreach (var user in currency.users)
+            {
+                if (user.Key == Username)
+                {
+                    indexx = index;
+                    break;
+                }
+                index += 1;
+            }
+            if (indexx == -1 == false)
+            {
+                currency.users[indexx] = new KeyValuePair<string, int>(Username, currency.users[indexx].Value + Amount);
+            }
+            else
+            {
+                currency.users.Add(new KeyValuePair<string, int>(Username, Amount));
+            }
+        }
+
+        private int GetCurrency(string Username)
+        {
+            foreach (var user in currency.users)
+            {
+                if (user.Key == Username)
+                {
+                    return user.Value;
+                }
+            }
+            return 0;
+        }
+
+        private void SaveCurrency()
+        {
+            File.WriteAllText("ChatCurrency.json", JsonConvert.SerializeObject(currency, Formatting.Indented));
+        }
+
 
         private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
@@ -156,6 +212,10 @@ namespace KruBot
                 }
                 
             }
+            if (e.ChatMessage.Message.ToUpper() == "!" + currency.CurrencyName.ToUpper())
+            {
+                client.SendMessage(e.ChatMessage.Channel, e.ChatMessage.Username + " has " + currency.CurrencySymbol  + " " + GetCurrency(e.ChatMessage.Username));
+            }
         }
 
         private void Client_OnJoinedChannel(object sender, OnJoinedChannelArgs e)
@@ -207,7 +267,7 @@ namespace KruBot
                         lblRequester.Text = songinfo.requester;
                         lblPlayerTime.Text = video.Duration.ToString();
                         client.SendMessage(ChannelToMod, "Playing " + video.Title);
-                        File.WriteAllText("./SongTitle.txt", "Now Playing: " + video.Title);
+                        File.WriteAllText("Z:/StreamAssets/SongTitle.txt", "Now Playing: " + video.Title);
                         File.WriteAllText("./Requester.txt", "Requested by: "  + songinfo.requester);  
                     }
                     catch { client.SendMessage(ChannelToMod, "Song failed to play: " + songinfo.name); }
@@ -231,8 +291,18 @@ namespace KruBot
             public string oauth;
             public string username;
             public string channeltomod;
+            public string alertsURL;
             //This is an object used for Twitch Authentication
         }
+
+        public class Currency
+        {
+            public string CurrencyName;
+            public string CurrencySymbol;
+            public List<KeyValuePair<string, int>> users = new List<KeyValuePair<string, int>>();
+        }
+
+
 
         public class songreq
         {
@@ -306,6 +376,29 @@ namespace KruBot
                 lbViewers.Items.Add("Viewers:");
                 lbViewers.Items.AddRange(Viewers.chatters.viewers.ToArray());
             }
+
+            //Double Duty, lets give currency at the same time
+            foreach (var user in Viewers.chatters.admins.ToArray())
+            {
+                GiveCurrency(user.ToString(), 10);
+            }
+            foreach (var user in Viewers.chatters.global_mods.ToArray())
+            {
+                GiveCurrency(user.ToString(), 10);
+            }
+            foreach (var user in Viewers.chatters.moderators.ToArray())
+            {
+                GiveCurrency(user.ToString(), 10);
+            }
+            foreach (var user in Viewers.chatters.vips.ToArray())
+            {
+                GiveCurrency(user.ToString(), 10);
+            }
+            foreach (var user in Viewers.chatters.viewers.ToArray())
+            {
+                GiveCurrency(user.ToString(), 10);
+            }
+            SaveCurrency();
         }
 
         private void CmdReAuthenticate_Click(object sender, EventArgs e)
@@ -330,6 +423,17 @@ namespace KruBot
 
             client.Disconnect();
             client.Connect();
+        }
+
+        private void BtnSaveAlert_Click(object sender, EventArgs e)
+        {
+            cred.alertsURL = tbAlertURL.Text;
+            SaveOptions();
+        }
+
+        public void SaveOptions()
+        {
+            File.WriteAllText("creds.json", JsonConvert.SerializeObject(cred, Formatting.Indented));
         }
     }
 }
