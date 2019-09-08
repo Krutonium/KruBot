@@ -95,12 +95,14 @@ namespace KruBot
             tbMusicVolume.MaximumSize = new System.Drawing.Size(tbMusicVolume.Width, 0);
             BrowserWindow.Controls.Add(browser);
             UpdateViewerList.Enabled = true;
-            
             client.OnDisconnected += Client_OnDisconnected;
             client.OnReconnected += Client_OnReconnected;
             browser.AddressChanged += Browser_AddressChanged;
+            //browser. <INJECT JAVASCRIPT ON POPUPS>
+            browser.ActivateBrowserOnCreation = true;
             ResetConnection.Enabled = true;
             var tmpBrowser = new ChromiumWebBrowser(cred.alertsURL);
+            tmpBrowser.ActivateBrowserOnCreation = true;
             gbAlerts.Controls.Add(tmpBrowser);
 
         }
@@ -108,6 +110,7 @@ namespace KruBot
         {
             browser.ExecuteScriptAsyncWhenPageLoaded(new WebClient().DownloadString("https://cdn.frankerfacez.com/script/ffz_injector.user.js"));
         }
+
 
         private void Client_OnReconnected(object sender, TwitchLib.Communication.Events.OnReconnectedEventArgs e)
         {
@@ -166,7 +169,6 @@ namespace KruBot
             if (e.ChatMessage.Message.ToLower().StartsWith("!songrequest") || e.ChatMessage.Message.ToLower().StartsWith("!sr")) //user sent a song request.
                 try
                 {
-
                     var ytLink = e.ChatMessage.Message.Split(' '); 
                     var url = ytLink[1];
                     if (url.ToUpper().Contains("YOUTUBE") == false && url.ToUpper().Contains("YOUTU.BE") == false)
@@ -181,6 +183,14 @@ namespace KruBot
                     }
                     else
                     {
+                        if(GetCurrency(e.ChatMessage.Username) < 100)
+                        {
+                            client.SendMessage(e.ChatMessage.Channel, "You don't have enough " + currency.CurrencyName);
+                            return;
+                        } else
+                        {
+                            GiveCurrency(e.ChatMessage.Username, -100);
+                        }
                         var p = new songreq();
                         p.requester = e.ChatMessage.Username;
                         p.ytlink = ytLink[1];
@@ -188,6 +198,7 @@ namespace KruBot
                         qt.Enqueue(p);
                         client.SendMessage(e.ChatMessage.Channel, "Added " + p.name + " to Queue.");
                         //Added song to the Queue.
+                        
                     }
                 }
                 catch
@@ -200,21 +211,59 @@ namespace KruBot
                 client.SendWhisper(e.ChatMessage.Username, "Queue");
                 if (songlist.Count > 0)
                 {
-                    foreach(var song in songlist)
+                    foreach (var song in songlist)
                     {
 
                         client.SendWhisper(e.ChatMessage.Username, song.name);
                         //Queue += song.name + Environment.NewLine;
-                    } 
-                } else
+                    }
+                }
+                else
                 {
                     //Queue = "No Songs in Queue";
                 }
-                
+
             }
-            if (e.ChatMessage.Message.ToUpper() == "!" + currency.CurrencyName.ToUpper())
+            //Money Commands
+            if (e.ChatMessage.Message.ToUpper().StartsWith( "!" + currency.CurrencyName.ToUpper()))
             {
-                client.SendMessage(e.ChatMessage.Channel, e.ChatMessage.Username + " has " + currency.CurrencySymbol  + " " + GetCurrency(e.ChatMessage.Username));
+
+                string[] command = e.ChatMessage.Message.Split(' ');
+                if(command.Length == 1)
+                {
+                    client.SendMessage(e.ChatMessage.Channel, e.ChatMessage.Username + " has " + currency.CurrencySymbol + " " + GetCurrency(e.ChatMessage.Username));
+                } else
+                {
+                    client.SendMessage(e.ChatMessage.Channel, command[1] + " has " + GetCurrency(command[1]).ToString() + " " + currency.CurrencyName);
+                }
+            }
+
+            
+
+            if (e.ChatMessage.Message.ToUpper().StartsWith("!GIVE")) {
+                if(e.ChatMessage.UserType == TwitchLib.Client.Enums.UserType.Moderator || e.ChatMessage.UserType == TwitchLib.Client.Enums.UserType.Broadcaster)
+                { //!give pfckrutonium 5 <= Gives PFCKrutonium 5 Krutons
+                    string[] command = e.ChatMessage.Message.Split(' ');
+                    try
+                    {
+                        GiveCurrency(command[1], Int32.Parse(command[2]));
+                        client.SendMessage(e.ChatMessage.Channel, "Gave " + command[1] + " " + command[2] + " " + currency.CurrencyName);
+                    }
+                    catch
+                    {
+                        client.SendMessage(e.ChatMessage.Channel, "Invalid Input");
+                    }
+                }
+            }
+            if (e.ChatMessage.Message.ToUpper().StartsWith("!RESET"))
+            {
+                if (e.ChatMessage.UserType == TwitchLib.Client.Enums.UserType.Moderator || e.ChatMessage.UserType == TwitchLib.Client.Enums.UserType.Broadcaster)
+                {
+                    string[] command = e.ChatMessage.Message.Split(' ');
+                    client.SendMessage(e.ChatMessage.Channel, "Resetting " + e.ChatMessage.Username + " from " + GetCurrency(command[1]) + " to 0"); 
+                    GiveCurrency(command[1], GetCurrency(command[1]) * -1);
+
+                }
             }
         }
 
