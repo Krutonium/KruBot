@@ -45,14 +45,16 @@
             this.gbSettings = new System.Windows.Forms.GroupBox();
             this.cmdReAuthenticate = new System.Windows.Forms.Button();
             this.gbStreamSettings = new System.Windows.Forms.GroupBox();
+            this.btnSaveAlert = new System.Windows.Forms.Button();
+            this.tbAlertURL = new System.Windows.Forms.TextBox();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.gbAlerts = new System.Windows.Forms.GroupBox();
             this.SongStarter = new System.Windows.Forms.Timer(this.components);
             this.UpdateViewerList = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.ResetConnection = new System.Windows.Forms.Timer(this.components);
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.gbAlerts = new System.Windows.Forms.GroupBox();
-            this.tbAlertURL = new System.Windows.Forms.TextBox();
-            this.btnSaveAlert = new System.Windows.Forms.Button();
+            this.btnSongRequestTitle = new System.Windows.Forms.Button();
+            this.saveFileDialog_SongRequest = new System.Windows.Forms.SaveFileDialog();
             this.TabControl.SuspendLayout();
             this.tabChat.SuspendLayout();
             this.BrowserWindow.SuspendLayout();
@@ -251,6 +253,7 @@
             // 
             // gbStreamSettings
             // 
+            this.gbStreamSettings.Controls.Add(this.btnSongRequestTitle);
             this.gbStreamSettings.Controls.Add(this.btnSaveAlert);
             this.gbStreamSettings.Controls.Add(this.tbAlertURL);
             this.gbStreamSettings.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -261,20 +264,22 @@
             this.gbStreamSettings.TabStop = false;
             this.gbStreamSettings.Text = "Stream Settings";
             // 
-            // SongStarter
+            // btnSaveAlert
             // 
-            this.SongStarter.Enabled = true;
-            this.SongStarter.Interval = 200;
-            this.SongStarter.Tick += new System.EventHandler(this.SongStarter_Tick);
+            this.btnSaveAlert.Location = new System.Drawing.Point(6, 19);
+            this.btnSaveAlert.Name = "btnSaveAlert";
+            this.btnSaveAlert.Size = new System.Drawing.Size(116, 23);
+            this.btnSaveAlert.TabIndex = 1;
+            this.btnSaveAlert.Text = "Save Alert URL";
+            this.btnSaveAlert.UseVisualStyleBackColor = true;
+            this.btnSaveAlert.Click += new System.EventHandler(this.BtnSaveAlert_Click);
             // 
-            // UpdateViewerList
+            // tbAlertURL
             // 
-            this.UpdateViewerList.Tick += new System.EventHandler(this.UpdateViewerList_Tick);
-            // 
-            // ResetConnection
-            // 
-            this.ResetConnection.Interval = 60000;
-            this.ResetConnection.Tick += new System.EventHandler(this.ResetConnection_Tick);
+            this.tbAlertURL.Location = new System.Drawing.Point(128, 19);
+            this.tbAlertURL.Name = "tbAlertURL";
+            this.tbAlertURL.Size = new System.Drawing.Size(400, 20);
+            this.tbAlertURL.TabIndex = 0;
             // 
             // tabPage1
             // 
@@ -296,22 +301,36 @@
             this.gbAlerts.TabStop = false;
             this.gbAlerts.Text = "Alerts";
             // 
-            // tbAlertURL
+            // SongStarter
             // 
-            this.tbAlertURL.Location = new System.Drawing.Point(128, 19);
-            this.tbAlertURL.Name = "tbAlertURL";
-            this.tbAlertURL.Size = new System.Drawing.Size(400, 20);
-            this.tbAlertURL.TabIndex = 0;
+            this.SongStarter.Enabled = true;
+            this.SongStarter.Interval = 200;
+            this.SongStarter.Tick += new System.EventHandler(this.SongStarter_Tick);
             // 
-            // btnSaveAlert
+            // UpdateViewerList
             // 
-            this.btnSaveAlert.Location = new System.Drawing.Point(6, 19);
-            this.btnSaveAlert.Name = "btnSaveAlert";
-            this.btnSaveAlert.Size = new System.Drawing.Size(116, 23);
-            this.btnSaveAlert.TabIndex = 1;
-            this.btnSaveAlert.Text = "Save Alert URL";
-            this.btnSaveAlert.UseVisualStyleBackColor = true;
-            this.btnSaveAlert.Click += new System.EventHandler(this.BtnSaveAlert_Click);
+            this.UpdateViewerList.Tick += new System.EventHandler(this.UpdateViewerList_Tick);
+            // 
+            // ResetConnection
+            // 
+            this.ResetConnection.Interval = 60000;
+            this.ResetConnection.Tick += new System.EventHandler(this.ResetConnection_Tick);
+            // 
+            // btnSongRequestTitle
+            // 
+            this.btnSongRequestTitle.Location = new System.Drawing.Point(6, 48);
+            this.btnSongRequestTitle.Name = "btnSongRequestTitle";
+            this.btnSongRequestTitle.Size = new System.Drawing.Size(238, 23);
+            this.btnSongRequestTitle.TabIndex = 2;
+            this.btnSongRequestTitle.Text = "Set Save Location for Song Request TItles";
+            this.btnSongRequestTitle.UseVisualStyleBackColor = true;
+            this.btnSongRequestTitle.Click += new System.EventHandler(this.btnSongRequestTitle_Click);
+            // 
+            // saveFileDialog_SongRequest
+            // 
+            this.saveFileDialog_SongRequest.DefaultExt = "txt";
+            this.saveFileDialog_SongRequest.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*\";";
+            this.saveFileDialog_SongRequest.Title = "Where do you want the File with the Title?";
             // 
             // frmKruBot
             // 
@@ -374,6 +393,8 @@
         private System.Windows.Forms.GroupBox gbAlerts;
         private System.Windows.Forms.Button btnSaveAlert;
         private System.Windows.Forms.TextBox tbAlertURL;
+        private System.Windows.Forms.Button btnSongRequestTitle;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog_SongRequest;
     }
 }
 

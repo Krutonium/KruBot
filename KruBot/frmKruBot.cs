@@ -104,8 +104,14 @@ namespace KruBot
             var tmpBrowser = new ChromiumWebBrowser(cred.alertsURL);
             tmpBrowser.ActivateBrowserOnCreation = true;
             gbAlerts.Controls.Add(tmpBrowser);
-
+            client.OnDisconnected += Client_OnDisconnected1;
         }
+
+        private void Client_OnDisconnected1(object sender, TwitchLib.Communication.Events.OnDisconnectedEventArgs e)
+        {
+            client.Connect();
+        }
+
         private void Browser_AddressChanged(object sender, AddressChangedEventArgs e)
         {
             browser.ExecuteScriptAsyncWhenPageLoaded(new WebClient().DownloadString("https://cdn.frankerfacez.com/script/ffz_injector.user.js"));
@@ -124,6 +130,10 @@ namespace KruBot
 
         private void GiveCurrency(string Username, int Amount)
         {
+            if (Username.StartsWith("@"))
+            {
+                Username = Username.Substring(1, Username.Length-1);
+            }
             int indexx = -1;
             int index = 0;
             foreach (var user in currency.users)
@@ -147,6 +157,10 @@ namespace KruBot
 
         private int GetCurrency(string Username)
         {
+            if (Username.StartsWith("@"))
+            {
+                Username = Username.Substring(1, Username.Length-1);
+            }
             foreach (var user in currency.users)
             {
                 if (user.Key == Username)
@@ -173,7 +187,8 @@ namespace KruBot
                     var url = ytLink[1];
                     if (url.ToUpper().Contains("YOUTUBE") == false && url.ToUpper().Contains("YOUTU.BE") == false)
                     {
-                        client.SendMessage(ChannelToMod, "That's not a valid video");
+                        //client.SendMessage(e.ChatMessage.Message,SearchForVideo(e.ChatMessage.Message));
+                        client.SendMessage(e.ChatMessage.Channel,"Invalid Video");
                         return;
                     }
                     var exists = qt.Any(x => x.ytlink.ToLower() == url.ToLower()); //Does any existing song request have the
@@ -223,6 +238,63 @@ namespace KruBot
                     //Queue = "No Songs in Queue";
                 }
 
+            }
+
+            if(e.ChatMessage.Message.ToUpper() == "!LURK")
+            {
+                client.SendMessage(e.ChatMessage.Channel, e.ChatMessage.Username + " is now lurking!");
+            }
+            if(e.ChatMessage.Message.ToUpper() == "!BACK")
+            {
+                client.SendMessage(e.ChatMessage.Channel, e.ChatMessage.Username + " is back from their lurk! Rejoice!");
+            }
+            if (e.ChatMessage.Message.ToUpper().Contains("LEWD")){
+                client.SendMessage(e.ChatMessage.Channel, "LEWD? WHERE?! OWO!!!");
+            }
+            if (e.ChatMessage.Message.ToUpper().StartsWith("!HUG"))
+            {
+                string[] command = e.ChatMessage.Message.Split(' ');
+                if(command.Length == 2)
+                {
+                    client.SendMessage(e.ChatMessage.Channel,e.ChatMessage.Username + " has given " + command[1] + " a hug! CUTE!");
+                }
+            }
+            if(e.ChatMessage.Message.ToUpper() == "!FOLLOWAGE")
+            {
+                client.SendMessage(e.ChatMessage.Channel, "Implement this on GitHub! https://github.com/PFCKrutonium/KruBot");
+            }
+            if(e.ChatMessage.Message.ToUpper() == "!UPTIME" && false)
+                //NEEDS OAUTH, IMPLEMENT LATER
+            {
+                TwitchAPI api = new TwitchAPI();
+                var userID = api.V5.Users.GetUserByNameAsync(e.ChatMessage.Username).Result;
+                var foundChannel = userID.Matches.FirstOrDefault();
+                var online = api.V5.Streams.BroadcasterOnlineAsync(foundChannel.Id).Result;
+                if (online)
+                {
+                    var uptime = api.V5.Streams.GetUptimeAsync(foundChannel.Id).Result;
+                    if (uptime.HasValue)
+                    {
+                        client.SendMessage(e.ChatMessage.Channel,foundChannel.Name + " has been online for " + uptime.Value.Hours +":"+ uptime.Value.Minutes);
+                    }
+                    else
+                    {
+                        client.SendMessage(e.ChatMessage.Channel, "Idk wtf");
+                    }
+                }
+
+            }
+            if(e.ChatMessage.Message.ToUpper() == "!COMMANDS")
+            {
+                client.SendWhisper(e.ChatMessage.Username, "https://pastebin.com/raw/Qn13QpyH <= Commands");
+            }
+            if(e.ChatMessage.Message.ToUpper() == "!SKIP")
+            {
+                if(e.ChatMessage.IsModerator == true || e.ChatMessage.IsBroadcaster == true)
+                {
+                    OutputDevice.Stop();
+                    client.SendMessage(e.ChatMessage.Channel, "Song Skipped");
+                }
             }
             //Money Commands
             if (e.ChatMessage.Message.ToUpper().StartsWith( "!" + currency.CurrencyName.ToUpper()))
@@ -316,7 +388,7 @@ namespace KruBot
                         lblRequester.Text = songinfo.requester;
                         lblPlayerTime.Text = video.Duration.ToString();
                         client.SendMessage(ChannelToMod, "Playing " + video.Title);
-                        File.WriteAllText("Z:/StreamAssets/SongTitle.txt", "Now Playing: " + video.Title);
+                        File.WriteAllText(cred.songTitleTxt, "Now Playing: " + video.Title);
                         File.WriteAllText("./Requester.txt", "Requested by: "  + songinfo.requester);  
                     }
                     catch { client.SendMessage(ChannelToMod, "Song failed to play: " + songinfo.name); }
@@ -324,7 +396,7 @@ namespace KruBot
             }
             if(qt.Count == 0 && OutputDevice.PlaybackState == PlaybackState.Stopped)
             {
-                File.WriteAllText("./SongTitle.txt", "");
+                File.WriteAllText(cred.songTitleTxt, "");
                 File.WriteAllText("./Requester.txt", "");
             }
             processing = false;
@@ -341,6 +413,7 @@ namespace KruBot
             public string username;
             public string channeltomod;
             public string alertsURL;
+            public string songTitleTxt = "./SongTitle.txt";
             //This is an object used for Twitch Authentication
         }
 
@@ -483,6 +556,16 @@ namespace KruBot
         public void SaveOptions()
         {
             File.WriteAllText("creds.json", JsonConvert.SerializeObject(cred, Formatting.Indented));
+        }
+
+        private void btnSongRequestTitle_Click(object sender, EventArgs e)
+        {
+            var result = saveFileDialog_SongRequest.ShowDialog();
+            if(result == DialogResult.OK)
+            {
+                cred.songTitleTxt = saveFileDialog.FileName;
+                SaveOptions();
+            }
         }
     }
 }
