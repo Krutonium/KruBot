@@ -563,7 +563,7 @@ namespace KruBot
             var result = saveFileDialog_SongRequest.ShowDialog();
             if(result == DialogResult.OK)
             {
-                cred.songTitleTxt = saveFileDialog.FileName;
+                cred.songTitleTxt = saveFileDialog_SongRequest.FileName;
                 SaveOptions();
             }
         }
