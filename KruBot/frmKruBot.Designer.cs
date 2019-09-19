@@ -45,6 +45,7 @@
             this.gbSettings = new System.Windows.Forms.GroupBox();
             this.cmdReAuthenticate = new System.Windows.Forms.Button();
             this.gbStreamSettings = new System.Windows.Forms.GroupBox();
+            this.btnSongRequestTitle = new System.Windows.Forms.Button();
             this.btnSaveAlert = new System.Windows.Forms.Button();
             this.tbAlertURL = new System.Windows.Forms.TextBox();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -53,8 +54,9 @@
             this.UpdateViewerList = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.ResetConnection = new System.Windows.Forms.Timer(this.components);
-            this.btnSongRequestTitle = new System.Windows.Forms.Button();
             this.saveFileDialog_SongRequest = new System.Windows.Forms.SaveFileDialog();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnPause = new System.Windows.Forms.Button();
             this.TabControl.SuspendLayout();
             this.tabChat.SuspendLayout();
             this.BrowserWindow.SuspendLayout();
@@ -69,6 +71,7 @@
             this.gbSettings.SuspendLayout();
             this.gbStreamSettings.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // TabControl
@@ -97,8 +100,8 @@
             // BrowserWindow
             // 
             this.BrowserWindow.ColumnCount = 2;
-            this.BrowserWindow.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75.69975F));
-            this.BrowserWindow.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.30025F));
+            this.BrowserWindow.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70.11208F));
+            this.BrowserWindow.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.88792F));
             this.BrowserWindow.Controls.Add(this.SidePanel, 1, 0);
             this.BrowserWindow.Dock = System.Windows.Forms.DockStyle.Fill;
             this.BrowserWindow.Location = new System.Drawing.Point(3, 3);
@@ -112,16 +115,16 @@
             // SidePanel
             // 
             this.SidePanel.ColumnCount = 2;
-            this.SidePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 28.42105F));
-            this.SidePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 71.57895F));
+            this.SidePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.93162F));
+            this.SidePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 76.06837F));
             this.SidePanel.Controls.Add(this.tbMusicVolume, 0, 0);
             this.SidePanel.Controls.Add(this.tblInfo, 1, 0);
             this.SidePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SidePanel.Location = new System.Drawing.Point(610, 3);
+            this.SidePanel.Location = new System.Drawing.Point(566, 3);
             this.SidePanel.Name = "SidePanel";
             this.SidePanel.RowCount = 1;
             this.SidePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 49.64539F));
-            this.SidePanel.Size = new System.Drawing.Size(190, 460);
+            this.SidePanel.Size = new System.Drawing.Size(234, 460);
             this.SidePanel.TabIndex = 5;
             // 
             // tbMusicVolume
@@ -131,7 +134,7 @@
             this.tbMusicVolume.Maximum = 100;
             this.tbMusicVolume.Name = "tbMusicVolume";
             this.tbMusicVolume.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.tbMusicVolume.Size = new System.Drawing.Size(47, 454);
+            this.tbMusicVolume.Size = new System.Drawing.Size(49, 454);
             this.tbMusicVolume.TabIndex = 1;
             this.tbMusicVolume.Value = 70;
             this.tbMusicVolume.Scroll += new System.EventHandler(this.tbMusicVolume_Scroll_1);
@@ -140,26 +143,26 @@
             // 
             this.tblInfo.ColumnCount = 1;
             this.tblInfo.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tblInfo.Controls.Add(this.btnSkip, 0, 4);
             this.tblInfo.Controls.Add(this.lblTitle, 0, 3);
             this.tblInfo.Controls.Add(this.lblPlayerTime, 0, 2);
             this.tblInfo.Controls.Add(this.lblRequester, 0, 1);
             this.tblInfo.Controls.Add(this.lbViewers, 0, 0);
+            this.tblInfo.Controls.Add(this.flowLayoutPanel1, 0, 4);
             this.tblInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tblInfo.Location = new System.Drawing.Point(56, 3);
+            this.tblInfo.Location = new System.Drawing.Point(58, 3);
             this.tblInfo.Name = "tblInfo";
             this.tblInfo.RowCount = 5;
             this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 19F));
-            this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
-            this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-            this.tblInfo.Size = new System.Drawing.Size(131, 454);
+            this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tblInfo.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
+            this.tblInfo.Size = new System.Drawing.Size(173, 454);
             this.tblInfo.TabIndex = 3;
             // 
             // btnSkip
             // 
-            this.btnSkip.Location = new System.Drawing.Point(3, 428);
+            this.btnSkip.Location = new System.Drawing.Point(3, 3);
             this.btnSkip.Name = "btnSkip";
             this.btnSkip.Size = new System.Drawing.Size(75, 23);
             this.btnSkip.TabIndex = 4;
@@ -170,7 +173,7 @@
             // lblTitle
             // 
             this.lblTitle.AutoSize = true;
-            this.lblTitle.Location = new System.Drawing.Point(3, 407);
+            this.lblTitle.Location = new System.Drawing.Point(3, 398);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(55, 13);
             this.lblTitle.TabIndex = 4;
@@ -179,7 +182,7 @@
             // lblPlayerTime
             // 
             this.lblPlayerTime.AutoSize = true;
-            this.lblPlayerTime.Location = new System.Drawing.Point(3, 387);
+            this.lblPlayerTime.Location = new System.Drawing.Point(3, 380);
             this.lblPlayerTime.Name = "lblPlayerTime";
             this.lblPlayerTime.Size = new System.Drawing.Size(70, 13);
             this.lblPlayerTime.TabIndex = 2;
@@ -188,7 +191,7 @@
             // lblRequester
             // 
             this.lblRequester.AutoSize = true;
-            this.lblRequester.Location = new System.Drawing.Point(3, 368);
+            this.lblRequester.Location = new System.Drawing.Point(3, 361);
             this.lblRequester.Name = "lblRequester";
             this.lblRequester.Size = new System.Drawing.Size(56, 13);
             this.lblRequester.TabIndex = 3;
@@ -200,7 +203,7 @@
             this.lbViewers.FormattingEnabled = true;
             this.lbViewers.Location = new System.Drawing.Point(3, 3);
             this.lbViewers.Name = "lbViewers";
-            this.lbViewers.Size = new System.Drawing.Size(125, 362);
+            this.lbViewers.Size = new System.Drawing.Size(167, 355);
             this.lbViewers.TabIndex = 5;
             // 
             // tabSettings
@@ -264,6 +267,16 @@
             this.gbStreamSettings.TabStop = false;
             this.gbStreamSettings.Text = "Stream Settings";
             // 
+            // btnSongRequestTitle
+            // 
+            this.btnSongRequestTitle.Location = new System.Drawing.Point(6, 48);
+            this.btnSongRequestTitle.Name = "btnSongRequestTitle";
+            this.btnSongRequestTitle.Size = new System.Drawing.Size(238, 23);
+            this.btnSongRequestTitle.TabIndex = 2;
+            this.btnSongRequestTitle.Text = "Set Save Location for Song Request TItles";
+            this.btnSongRequestTitle.UseVisualStyleBackColor = true;
+            this.btnSongRequestTitle.Click += new System.EventHandler(this.btnSongRequestTitle_Click);
+            // 
             // btnSaveAlert
             // 
             this.btnSaveAlert.Location = new System.Drawing.Point(6, 19);
@@ -316,21 +329,32 @@
             this.ResetConnection.Interval = 60000;
             this.ResetConnection.Tick += new System.EventHandler(this.ResetConnection_Tick);
             // 
-            // btnSongRequestTitle
-            // 
-            this.btnSongRequestTitle.Location = new System.Drawing.Point(6, 48);
-            this.btnSongRequestTitle.Name = "btnSongRequestTitle";
-            this.btnSongRequestTitle.Size = new System.Drawing.Size(238, 23);
-            this.btnSongRequestTitle.TabIndex = 2;
-            this.btnSongRequestTitle.Text = "Set Save Location for Song Request TItles";
-            this.btnSongRequestTitle.UseVisualStyleBackColor = true;
-            this.btnSongRequestTitle.Click += new System.EventHandler(this.btnSongRequestTitle_Click);
-            // 
             // saveFileDialog_SongRequest
             // 
             this.saveFileDialog_SongRequest.DefaultExt = "txt";
             this.saveFileDialog_SongRequest.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*\";";
             this.saveFileDialog_SongRequest.Title = "Where do you want the File with the Title?";
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.btnSkip);
+            this.flowLayoutPanel1.Controls.Add(this.btnPause);
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 421);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(167, 30);
+            this.flowLayoutPanel1.TabIndex = 6;
+            // 
+            // btnPause
+            // 
+            this.btnPause.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.btnPause.Location = new System.Drawing.Point(84, 3);
+            this.btnPause.Name = "btnPause";
+            this.btnPause.Size = new System.Drawing.Size(75, 23);
+            this.btnPause.TabIndex = 5;
+            this.btnPause.Text = "Pause";
+            this.btnPause.UseVisualStyleBackColor = true;
+            this.btnPause.Click += new System.EventHandler(this.BtnPause_Click);
             // 
             // frmKruBot
             // 
@@ -358,6 +382,7 @@
             this.gbStreamSettings.ResumeLayout(false);
             this.gbStreamSettings.PerformLayout();
             this.tabPage1.ResumeLayout(false);
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -395,6 +420,8 @@
         private System.Windows.Forms.TextBox tbAlertURL;
         private System.Windows.Forms.Button btnSongRequestTitle;
         private System.Windows.Forms.SaveFileDialog saveFileDialog_SongRequest;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Button btnPause;
     }
 }
 

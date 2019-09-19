@@ -16,6 +16,8 @@ using CefSharp.WinForms;
 using CefSharp;
 using TwitchLib.Api;
 using System.Net;
+using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 //TODO:
 // Capture More Information from Song Requests for Display ✔
@@ -26,6 +28,8 @@ namespace KruBot
 {
     public partial class frmKruBot : Form
     {
+
+
         public static TwitchClient client = new TwitchClient();
         public static Queue<songreq> qt = new Queue<songreq>();
         public static WaveOutEvent OutputDevice = new WaveOutEvent();
@@ -72,7 +76,7 @@ namespace KruBot
             settings.PersistUserPreferences = true;
             settings.CefCommandLineArgs.Add("autoplay-policy", "no-user-gesture-required");
             Cef.Initialize(settings);
-            
+
             if (File.Exists("creds.json"))
             {
                 cred = JsonConvert.DeserializeObject<creds>(File.ReadAllText("creds.json"));
@@ -120,7 +124,7 @@ namespace KruBot
 
         private void Client_OnReconnected(object sender, TwitchLib.Communication.Events.OnReconnectedEventArgs e)
         {
-            client.SendMessage(ChannelToMod,"Reconnected to Chat");
+            client.SendMessage(ChannelToMod, "Reconnected to Chat");
         }
 
         private void Client_OnDisconnected(object sender, TwitchLib.Communication.Events.OnDisconnectedEventArgs e)
@@ -132,7 +136,7 @@ namespace KruBot
         {
             if (Username.StartsWith("@"))
             {
-                Username = Username.Substring(1, Username.Length-1);
+                Username = Username.Substring(1, Username.Length - 1);
             }
             int indexx = -1;
             int index = 0;
@@ -159,7 +163,7 @@ namespace KruBot
         {
             if (Username.StartsWith("@"))
             {
-                Username = Username.Substring(1, Username.Length-1);
+                Username = Username.Substring(1, Username.Length - 1);
             }
             foreach (var user in currency.users)
             {
@@ -183,12 +187,12 @@ namespace KruBot
             if (e.ChatMessage.Message.ToLower().StartsWith("!songrequest") || e.ChatMessage.Message.ToLower().StartsWith("!sr")) //user sent a song request.
                 try
                 {
-                    var ytLink = e.ChatMessage.Message.Split(' '); 
+                    var ytLink = e.ChatMessage.Message.Split(' ');
                     var url = ytLink[1];
                     if (url.ToUpper().Contains("YOUTUBE") == false && url.ToUpper().Contains("YOUTU.BE") == false)
                     {
                         //client.SendMessage(e.ChatMessage.Message,SearchForVideo(e.ChatMessage.Message));
-                        client.SendMessage(e.ChatMessage.Channel,"Invalid Video");
+                        client.SendMessage(e.ChatMessage.Channel, "Invalid Video");
                         return;
                     }
                     var exists = qt.Any(x => x.ytlink.ToLower() == url.ToLower()); //Does any existing song request have the
@@ -198,7 +202,7 @@ namespace KruBot
                     }
                     else
                     {
-                        if(GetCurrency(e.ChatMessage.Username) < 100)
+                        if (GetCurrency(e.ChatMessage.Username) < 100 && !e.ChatMessage.IsModerator && !e.ChatMessage.IsSubscriber)
                         {
                             client.SendMessage(e.ChatMessage.Channel, "You don't have enough " + currency.CurrencyName);
                             return;
@@ -213,7 +217,7 @@ namespace KruBot
                         qt.Enqueue(p);
                         client.SendMessage(e.ChatMessage.Channel, "Added " + p.name + " to Queue.");
                         //Added song to the Queue.
-                        
+                        PlayPauseSpotify();
                     }
                 }
                 catch
@@ -240,31 +244,31 @@ namespace KruBot
 
             }
 
-            if(e.ChatMessage.Message.ToUpper() == "!LURK")
+            if (e.ChatMessage.Message.ToUpper() == "!LURK")
             {
                 client.SendMessage(e.ChatMessage.Channel, e.ChatMessage.Username + " is now lurking!");
             }
-            if(e.ChatMessage.Message.ToUpper() == "!BACK")
+            if (e.ChatMessage.Message.ToUpper() == "!BACK")
             {
                 client.SendMessage(e.ChatMessage.Channel, e.ChatMessage.Username + " is back from their lurk! Rejoice!");
             }
-            if (e.ChatMessage.Message.ToUpper().Contains("LEWD")){
+            if (e.ChatMessage.Message.ToUpper().Contains("LEWD")) {
                 client.SendMessage(e.ChatMessage.Channel, "LEWD? WHERE?! OWO!!!");
             }
             if (e.ChatMessage.Message.ToUpper().StartsWith("!HUG"))
             {
                 string[] command = e.ChatMessage.Message.Split(' ');
-                if(command.Length == 2)
+                if (command.Length == 2)
                 {
-                    client.SendMessage(e.ChatMessage.Channel,e.ChatMessage.Username + " has given " + command[1] + " a hug! CUTE!");
+                    client.SendMessage(e.ChatMessage.Channel, e.ChatMessage.Username + " has given " + command[1] + " a hug! CUTE!");
                 }
             }
-            if(e.ChatMessage.Message.ToUpper() == "!FOLLOWAGE")
+            if (e.ChatMessage.Message.ToUpper() == "!FOLLOWAGE")
             {
                 client.SendMessage(e.ChatMessage.Channel, "Implement this on GitHub! https://github.com/PFCKrutonium/KruBot");
             }
-            if(e.ChatMessage.Message.ToUpper() == "!UPTIME" && false)
-                //NEEDS OAUTH, IMPLEMENT LATER
+            if (e.ChatMessage.Message.ToUpper() == "!UPTIME" && false)
+            //NEEDS OAUTH, IMPLEMENT LATER
             {
                 TwitchAPI api = new TwitchAPI();
                 var userID = api.V5.Users.GetUserByNameAsync(e.ChatMessage.Username).Result;
@@ -275,7 +279,7 @@ namespace KruBot
                     var uptime = api.V5.Streams.GetUptimeAsync(foundChannel.Id).Result;
                     if (uptime.HasValue)
                     {
-                        client.SendMessage(e.ChatMessage.Channel,foundChannel.Name + " has been online for " + uptime.Value.Hours +":"+ uptime.Value.Minutes);
+                        client.SendMessage(e.ChatMessage.Channel, foundChannel.Name + " has been online for " + uptime.Value.Hours + ":" + uptime.Value.Minutes);
                     }
                     else
                     {
@@ -284,24 +288,24 @@ namespace KruBot
                 }
 
             }
-            if(e.ChatMessage.Message.ToUpper() == "!COMMANDS")
+            if (e.ChatMessage.Message.ToUpper() == "!COMMANDS")
             {
                 client.SendWhisper(e.ChatMessage.Username, "https://pastebin.com/raw/Qn13QpyH <= Commands");
             }
-            if(e.ChatMessage.Message.ToUpper() == "!SKIP")
+            if (e.ChatMessage.Message.ToUpper() == "!SKIP")
             {
-                if(e.ChatMessage.IsModerator == true || e.ChatMessage.IsBroadcaster == true)
+                if (e.ChatMessage.IsModerator == true || e.ChatMessage.IsBroadcaster == true)
                 {
                     OutputDevice.Stop();
                     client.SendMessage(e.ChatMessage.Channel, "Song Skipped");
                 }
             }
             //Money Commands
-            if (e.ChatMessage.Message.ToUpper().StartsWith( "!" + currency.CurrencyName.ToUpper()))
+            if (e.ChatMessage.Message.ToUpper().StartsWith("!" + currency.CurrencyName.ToUpper()))
             {
 
                 string[] command = e.ChatMessage.Message.Split(' ');
-                if(command.Length == 1)
+                if (command.Length == 1)
                 {
                     client.SendMessage(e.ChatMessage.Channel, e.ChatMessage.Username + " has " + currency.CurrencySymbol + " " + GetCurrency(e.ChatMessage.Username));
                 } else
@@ -310,10 +314,10 @@ namespace KruBot
                 }
             }
 
-            
+
 
             if (e.ChatMessage.Message.ToUpper().StartsWith("!GIVE")) {
-                if(e.ChatMessage.UserType == TwitchLib.Client.Enums.UserType.Moderator || e.ChatMessage.UserType == TwitchLib.Client.Enums.UserType.Broadcaster)
+                if (e.ChatMessage.UserType == TwitchLib.Client.Enums.UserType.Moderator || e.ChatMessage.UserType == TwitchLib.Client.Enums.UserType.Broadcaster)
                 { //!give pfckrutonium 5 <= Gives PFCKrutonium 5 Krutons
                     string[] command = e.ChatMessage.Message.Split(' ');
                     try
@@ -332,7 +336,7 @@ namespace KruBot
                 if (e.ChatMessage.UserType == TwitchLib.Client.Enums.UserType.Moderator || e.ChatMessage.UserType == TwitchLib.Client.Enums.UserType.Broadcaster)
                 {
                     string[] command = e.ChatMessage.Message.Split(' ');
-                    client.SendMessage(e.ChatMessage.Channel, "Resetting " + e.ChatMessage.Username + " from " + GetCurrency(command[1]) + " to 0"); 
+                    client.SendMessage(e.ChatMessage.Channel, "Resetting " + e.ChatMessage.Username + " from " + GetCurrency(command[1]) + " to 0");
                     GiveCurrency(command[1], GetCurrency(command[1]) * -1);
 
                 }
@@ -346,7 +350,7 @@ namespace KruBot
 
         private void Client_OnConnected(object sender, OnConnectedArgs e)
         {
-           
+
         }
 
         private string GetVideoTitle(string url)
@@ -369,7 +373,7 @@ namespace KruBot
             if (qt.Count > 0 && processing == false)
             {
                 processing = true;
-                if(OutputDevice.PlaybackState == PlaybackState.Stopped)
+                if (OutputDevice.PlaybackState == PlaybackState.Stopped)
                 {
                     var songinfo = qt.Dequeue();
                     try
@@ -389,12 +393,14 @@ namespace KruBot
                         lblPlayerTime.Text = video.Duration.ToString();
                         client.SendMessage(ChannelToMod, "Playing " + video.Title);
                         File.WriteAllText(cred.songTitleTxt, "Now Playing: " + video.Title);
-                        File.WriteAllText("./Requester.txt", "Requested by: "  + songinfo.requester);  
+                        File.WriteAllText("./Requester.txt", "Requested by: " + songinfo.requester);
+                        this.Text = "KruBot - Playing";
+
                     }
                     catch { client.SendMessage(ChannelToMod, "Song failed to play: " + songinfo.name); }
                 }
             }
-            if(qt.Count == 0 && OutputDevice.PlaybackState == PlaybackState.Stopped)
+            if (qt.Count == 0 && OutputDevice.PlaybackState == PlaybackState.Stopped)
             {
                 File.WriteAllText(cred.songTitleTxt, "");
                 File.WriteAllText("./Requester.txt", "");
@@ -406,6 +412,21 @@ namespace KruBot
         {
             OutputDevice.Stop();
         }
+
+
+        [DllImport("User32.dll")]
+        static extern int SetForegroundWindow(IntPtr point);
+        private void PlayPauseSpotify()
+        {
+            Process[] p = Process.GetProcessesByName("Spotify.exe");
+            foreach (Process q in p)
+            {
+                IntPtr h = q.MainWindowHandle;
+                SetForegroundWindow(h);
+                SendKeys.SendWait("{MediaPlayPause}");
+            }
+        }
+
 
         public class creds
         {
@@ -565,6 +586,23 @@ namespace KruBot
             {
                 cred.songTitleTxt = saveFileDialog_SongRequest.FileName;
                 SaveOptions();
+            }
+        }
+
+        private void BtnPause_Click(object sender, EventArgs e)
+        {
+            if(OutputDevice.PlaybackState == PlaybackState.Paused)
+            {
+                //client.SendMessage(cred.channeltomod, "Resumed Music");
+                this.Text = "KruBot - Playing";
+                btnPause.Text = "⏸️";
+                OutputDevice.Play();
+            } else
+            {
+                //client.SendMessage(cred.channeltomod, "Paused Music");
+                OutputDevice.Pause();
+                btnPause.Text = "▶️";
+                this.Text = "KruBot - Paused";
             }
         }
     }
