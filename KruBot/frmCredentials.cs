@@ -29,13 +29,38 @@ namespace KruBot
 
         private void CmdSave_Click(object sender, EventArgs e)
         {
+            List<string> lsErrors = new List<string>();
+
             var creds = new creds();
-            creds.username = tbAccountName.Text;
-            creds.oauth = tbOauth.Text;
-            creds.channeltomod = tbChannelName.Text.ToLower();
-            File.WriteAllText("creds.json", JsonConvert.SerializeObject(creds, Formatting.Indented));
-            System.Threading.Thread.Sleep(1000);
-            this.Close();
+            HandleEmptyCredentials("Account name", tbAccountName.Text, ref creds.username, ref lsErrors);
+            HandleEmptyCredentials("OAuth", tbOauth.Text, ref creds.oauth, ref lsErrors);
+            HandleEmptyCredentials("Channel name", tbChannelName.Text.ToLower(), ref creds.channeltomod, ref lsErrors);
+
+            if (lsErrors.Count <= 0)
+            {
+                File.WriteAllText("creds.json", JsonConvert.SerializeObject(creds, Formatting.Indented));
+                System.Threading.Thread.Sleep(1000);
+                this.Close();
+            }
+            else
+            {
+                foreach (string sError in lsErrors)
+                {
+                    MessageBox.Show(sError);
+                }
+            }
+        }
+
+        private void HandleEmptyCredentials(string sLabel, string field, ref string cred, ref List<string> lsErrors)
+        {
+            if (String.IsNullOrWhiteSpace(field))
+            {
+                lsErrors.Add(sLabel + " cannot be left blank.");
+            }
+            else
+            {
+                cred = field;
+            }
         }
 
         private void FrmCredentials_Load(object sender, EventArgs e)

@@ -69,14 +69,14 @@
             this.tbAccountName.Location = new System.Drawing.Point(153, 37);
             this.tbAccountName.Name = "tbAccountName";
             this.tbAccountName.Size = new System.Drawing.Size(484, 20);
-            this.tbAccountName.TabIndex = 3;
+            this.tbAccountName.TabIndex = 1;
             // 
             // cmdSave
             // 
             this.cmdSave.Location = new System.Drawing.Point(562, 89);
             this.cmdSave.Name = "cmdSave";
             this.cmdSave.Size = new System.Drawing.Size(75, 23);
-            this.cmdSave.TabIndex = 5;
+            this.cmdSave.TabIndex = 4;
             this.cmdSave.Text = "Save";
             this.cmdSave.UseVisualStyleBackColor = true;
             this.cmdSave.Click += new System.EventHandler(this.CmdSave_Click);
@@ -86,7 +86,7 @@
             this.gbAuth.Location = new System.Drawing.Point(12, 133);
             this.gbAuth.Name = "gbAuth";
             this.gbAuth.Size = new System.Drawing.Size(625, 431);
-            this.gbAuth.TabIndex = 6;
+            this.gbAuth.TabIndex = 5;
             this.gbAuth.TabStop = false;
             this.gbAuth.Text = "Authenticate Here as your Bot (not implemented yet)";
             // 
@@ -104,14 +104,14 @@
             this.tbChannelName.Location = new System.Drawing.Point(153, 63);
             this.tbChannelName.Name = "tbChannelName";
             this.tbChannelName.Size = new System.Drawing.Size(484, 20);
-            this.tbChannelName.TabIndex = 8;
+            this.tbChannelName.TabIndex = 2;
             // 
             // btnClearCookies
             // 
             this.btnClearCookies.Location = new System.Drawing.Point(457, 89);
             this.btnClearCookies.Name = "btnClearCookies";
             this.btnClearCookies.Size = new System.Drawing.Size(99, 23);
-            this.btnClearCookies.TabIndex = 9;
+            this.btnClearCookies.TabIndex = 3;
             this.btnClearCookies.Text = "Clear Cookies";
             this.btnClearCookies.UseVisualStyleBackColor = true;
             this.btnClearCookies.Click += new System.EventHandler(this.BtnClearCookies_Click);
