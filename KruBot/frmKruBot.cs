@@ -38,6 +38,9 @@ namespace KruBot
         public static ChromiumWebBrowser browser;
         public static ConnectionCredentials credentials;
         public static Currency currency = new Currency();
+
+        TwitchAPI api = new TwitchAPI();
+
         public frmKruBot()
         {
             InitializeComponent();
@@ -109,6 +112,9 @@ namespace KruBot
             tmpBrowser.ActivateBrowserOnCreation = true;
             gbAlerts.Controls.Add(tmpBrowser);
             client.OnDisconnected += Client_OnDisconnected1;
+
+            api.Settings.ClientId = cred.clientID;
+            api.Settings.AccessToken = cred.oauth;
         }
 
         private void Client_OnDisconnected1(object sender, TwitchLib.Communication.Events.OnDisconnectedEventArgs e)
@@ -267,10 +273,8 @@ namespace KruBot
             {
                 client.SendMessage(e.ChatMessage.Channel, "Implement this on GitHub! https://github.com/PFCKrutonium/KruBot");
             }
-            if (e.ChatMessage.Message.ToUpper() == "!UPTIME" && false)
-            //NEEDS OAUTH, IMPLEMENT LATER
+            if (e.ChatMessage.Message.ToUpper() == "!UPTIME")
             {
-                TwitchAPI api = new TwitchAPI();
                 var userID = api.V5.Users.GetUserByNameAsync(e.ChatMessage.Username).Result;
                 var foundChannel = userID.Matches.FirstOrDefault();
                 var online = api.V5.Streams.BroadcasterOnlineAsync(foundChannel.Id).Result;
@@ -279,14 +283,13 @@ namespace KruBot
                     var uptime = api.V5.Streams.GetUptimeAsync(foundChannel.Id).Result;
                     if (uptime.HasValue)
                     {
-                        client.SendMessage(e.ChatMessage.Channel, foundChannel.Name + " has been online for " + uptime.Value.Hours + ":" + uptime.Value.Minutes);
+                        client.SendMessage(e.ChatMessage.Channel, foundChannel.Name + " has been online for " + uptime.Value.Hours + " hours and " + uptime.Value.Minutes + " minutes.");
                     }
                     else
                     {
-                        client.SendMessage(e.ChatMessage.Channel, "Idk wtf");
+                        //client.SendMessage(e.ChatMessage.Channel, "uptime did not return a value.");
                     }
                 }
-
             }
             if (e.ChatMessage.Message.ToUpper() == "!COMMANDS")
             {
@@ -431,6 +434,7 @@ namespace KruBot
         public class creds
         {
             public string oauth;
+            public string clientID;
             public string username;
             public string channeltomod;
             public string alertsURL;

@@ -34,6 +34,7 @@ namespace KruBot
             var creds = new creds();
             HandleEmptyCredentials("Account name", tbAccountName.Text, ref creds.username, ref lsErrors);
             HandleEmptyCredentials("OAuth", tbOauth.Text, ref creds.oauth, ref lsErrors);
+            HandleEmptyCredentials("Client ID", tbClientID.Text.ToLower(), ref creds.clientID, ref lsErrors);
             HandleEmptyCredentials("Channel name", tbChannelName.Text.ToLower(), ref creds.channeltomod, ref lsErrors);
 
             if (lsErrors.Count <= 0)
@@ -74,6 +75,7 @@ namespace KruBot
         public class creds
         {
             public string oauth;
+            public string clientID;
             public string username;
             public string channeltomod;
             public string alertsURL;
