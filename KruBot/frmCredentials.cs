@@ -20,6 +20,14 @@ namespace KruBot
         public frmCredentials()
         {
             InitializeComponent();
+            if (File.Exists("creds.json.old"))
+            {
+                var tempvars = JsonConvert.DeserializeObject<creds>(File.ReadAllText("creds.json.old"));
+                tbOauth.Text = tempvars.oauth;
+                tbClientID.Text = tempvars.clientID;
+                tbAccountName.Text = tempvars.username;
+                tbChannelName.Text = tempvars.channeltomod;
+            }
         }
 
         private void CmdGetOauth_Click(object sender, EventArgs e)
@@ -40,6 +48,7 @@ namespace KruBot
             if (lsErrors.Count <= 0)
             {
                 File.WriteAllText("creds.json", JsonConvert.SerializeObject(creds, Formatting.Indented));
+                DialogResult = DialogResult.OK;
                 System.Threading.Thread.Sleep(1000);
                 this.Close();
             }
