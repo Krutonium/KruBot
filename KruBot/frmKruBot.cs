@@ -54,6 +54,10 @@ namespace KruBot
                 DialogResult dialogResult = MessageBox.Show("We detected that your credentials were in the middle of being replaced. Recover?", "Recover Credentials?", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
+                    if (File.Exists("creds.json")) // Stops an error when both .old and .json exist (rare case)
+                    {
+                        File.Delete("creds.json");
+                    }
                     File.Move("creds.json.old", "creds.json");
                 }
                 else
@@ -552,16 +556,24 @@ namespace KruBot
         {
             File.Move("./creds.json", "creds.json.old");
             frmCredentials credForm = new frmCredentials();
-            credForm.ShowDialog();
+            if (credForm.ShowDialog(this) == DialogResult.OK)
+            {
+                //MessageBox.Show("Restart the bot for the changes to take effect.");
+                var tempvars = JsonConvert.DeserializeObject<creds>(File.ReadAllText("creds.json"));
+                ChannelToMod = tempvars.channeltomod;
+                browser.Load("https://www.twitch.tv/popout/" + ChannelToMod + "/chat?popout=");
+                UpdateViewerList.Interval = 1;
+            }
+            else
+            {
+                File.Move("creds.json.old", "./creds.json");
+                DialogResult dialogResult = MessageBox.Show("Your credentials were not changed.", "", MessageBoxButtons.OK);
+            }
+
             if (File.Exists("creds.json"))
             {
                 File.Delete("creds.json.old");
             }
-            //MessageBox.Show("Restart the bot for the changes to take effect.");
-            var tempvars = JsonConvert.DeserializeObject<creds>(File.ReadAllText("creds.json"));
-            ChannelToMod = tempvars.channeltomod;
-            browser.Load("https://www.twitch.tv/popout/" + ChannelToMod + "/chat?popout=");
-            UpdateViewerList.Interval = 1;
         }
 
         private void ResetConnection_Tick(object sender, EventArgs e)
