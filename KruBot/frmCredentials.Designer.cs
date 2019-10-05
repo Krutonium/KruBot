@@ -37,6 +37,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.tbChannelName = new System.Windows.Forms.TextBox();
             this.btnClearCookies = new System.Windows.Forms.Button();
+            this.tbClientID = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // tbOauth
@@ -58,7 +60,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(35, 40);
+            this.label2.Location = new System.Drawing.Point(35, 68);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(109, 13);
             this.label2.TabIndex = 2;
@@ -66,14 +68,14 @@
             // 
             // tbAccountName
             // 
-            this.tbAccountName.Location = new System.Drawing.Point(153, 37);
+            this.tbAccountName.Location = new System.Drawing.Point(153, 65);
             this.tbAccountName.Name = "tbAccountName";
             this.tbAccountName.Size = new System.Drawing.Size(484, 20);
-            this.tbAccountName.TabIndex = 3;
+            this.tbAccountName.TabIndex = 2;
             // 
             // cmdSave
             // 
-            this.cmdSave.Location = new System.Drawing.Point(562, 89);
+            this.cmdSave.Location = new System.Drawing.Point(562, 120);
             this.cmdSave.Name = "cmdSave";
             this.cmdSave.Size = new System.Drawing.Size(75, 23);
             this.cmdSave.TabIndex = 5;
@@ -83,7 +85,7 @@
             // 
             // gbAuth
             // 
-            this.gbAuth.Location = new System.Drawing.Point(12, 133);
+            this.gbAuth.Location = new System.Drawing.Point(12, 147);
             this.gbAuth.Name = "gbAuth";
             this.gbAuth.Size = new System.Drawing.Size(625, 431);
             this.gbAuth.TabIndex = 6;
@@ -93,7 +95,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 63);
+            this.label3.Location = new System.Drawing.Point(9, 95);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(135, 13);
             this.label3.TabIndex = 7;
@@ -101,26 +103,44 @@
             // 
             // tbChannelName
             // 
-            this.tbChannelName.Location = new System.Drawing.Point(153, 63);
+            this.tbChannelName.Location = new System.Drawing.Point(153, 92);
             this.tbChannelName.Name = "tbChannelName";
             this.tbChannelName.Size = new System.Drawing.Size(484, 20);
-            this.tbChannelName.TabIndex = 8;
+            this.tbChannelName.TabIndex = 3;
             // 
             // btnClearCookies
             // 
-            this.btnClearCookies.Location = new System.Drawing.Point(457, 89);
+            this.btnClearCookies.Location = new System.Drawing.Point(457, 120);
             this.btnClearCookies.Name = "btnClearCookies";
             this.btnClearCookies.Size = new System.Drawing.Size(99, 23);
-            this.btnClearCookies.TabIndex = 9;
+            this.btnClearCookies.TabIndex = 4;
             this.btnClearCookies.Text = "Clear Cookies";
             this.btnClearCookies.UseVisualStyleBackColor = true;
             this.btnClearCookies.Click += new System.EventHandler(this.BtnClearCookies_Click);
+            // 
+            // tbClientID
+            // 
+            this.tbClientID.Location = new System.Drawing.Point(153, 38);
+            this.tbClientID.Name = "tbClientID";
+            this.tbClientID.Size = new System.Drawing.Size(484, 20);
+            this.tbClientID.TabIndex = 1;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(62, 41);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(82, 13);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "Twitch Client ID";
             // 
             // frmCredentials
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(649, 576);
+            this.ClientSize = new System.Drawing.Size(649, 592);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.tbClientID);
             this.Controls.Add(this.btnClearCookies);
             this.Controls.Add(this.tbChannelName);
             this.Controls.Add(this.label3);
@@ -149,5 +169,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbChannelName;
         private System.Windows.Forms.Button btnClearCookies;
+        private System.Windows.Forms.TextBox tbClientID;
+        private System.Windows.Forms.Label label4;
     }
 }
