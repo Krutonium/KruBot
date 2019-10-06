@@ -39,6 +39,8 @@ namespace KruBot
         public static ConnectionCredentials credentials;
         public static Currency currency = new Currency();
 
+        List<Quote> quotes = new List<Quote>();
+
         TwitchAPI api = new TwitchAPI();
 
         public frmKruBot()
@@ -93,6 +95,19 @@ namespace KruBot
                 frmcreds.ShowDialog();
                 cred = JsonConvert.DeserializeObject<creds>(File.ReadAllText("creds.json"));
             }
+
+            if (File.Exists("quotes.json"))
+            {
+                try
+                {
+                    quotes = JsonConvert.DeserializeObject<List<Quote>>(File.ReadAllText("quotes.json"));
+                }
+                catch (Exception ex)
+                {
+                    // Could not deserialize quotes file.
+                }
+            }
+
             ChannelToMod = cred.channeltomod;
             //Loads our Twitch Credentials from the Json file.
             credentials = new ConnectionCredentials(cred.username, cred.oauth);
@@ -209,6 +224,7 @@ namespace KruBot
                     if (exists) //Same youtube URL.
                     {
                         client.SendMessage(e.ChatMessage.Channel, "Song already exists in Queue.");
+                        return;
                     }
                     else
                     {
@@ -228,6 +244,7 @@ namespace KruBot
                         client.SendMessage(e.ChatMessage.Channel, "Added " + p.name + " to Queue.");
                         //Added song to the Queue.
                         PlayPauseSpotify();
+                        return;
                     }
                 }
                 catch
@@ -251,19 +268,23 @@ namespace KruBot
                 {
                     //Queue = "No Songs in Queue";
                 }
+                return;
 
             }
 
             if (e.ChatMessage.Message.ToUpper() == "!LURK")
             {
                 client.SendMessage(e.ChatMessage.Channel, e.ChatMessage.Username + " is now lurking!");
+                return;
             }
             if (e.ChatMessage.Message.ToUpper() == "!BACK")
             {
                 client.SendMessage(e.ChatMessage.Channel, e.ChatMessage.Username + " is back from their lurk! Rejoice!");
+                return;
             }
             if (e.ChatMessage.Message.ToUpper().Contains("LEWD")) {
                 client.SendMessage(e.ChatMessage.Channel, "LEWD? WHERE?! OWO!!!");
+                return;
             }
             if (e.ChatMessage.Message.ToUpper().StartsWith("!HUG"))
             {
@@ -272,10 +293,12 @@ namespace KruBot
                 {
                     client.SendMessage(e.ChatMessage.Channel, e.ChatMessage.Username + " has given " + command[1] + " a hug! CUTE!");
                 }
+                return;
             }
             if (e.ChatMessage.Message.ToUpper() == "!FOLLOWAGE")
             {
                 client.SendMessage(e.ChatMessage.Channel, "Implement this on GitHub! https://github.com/PFCKrutonium/KruBot");
+                return;
             }
             if (e.ChatMessage.Message.ToUpper() == "!UPTIME")
             {
@@ -294,10 +317,12 @@ namespace KruBot
                         //client.SendMessage(e.ChatMessage.Channel, "uptime did not return a value.");
                     }
                 }
+                return;
             }
             if (e.ChatMessage.Message.ToUpper() == "!COMMANDS")
             {
                 client.SendWhisper(e.ChatMessage.Username, "https://pastebin.com/raw/Qn13QpyH <= Commands");
+                return;
             }
             if (e.ChatMessage.Message.ToUpper() == "!SKIP")
             {
@@ -306,6 +331,7 @@ namespace KruBot
                     OutputDevice.Stop();
                     client.SendMessage(e.ChatMessage.Channel, "Song Skipped");
                 }
+                return;
             }
             //Money Commands
             if (e.ChatMessage.Message.ToUpper().StartsWith("!" + currency.CurrencyName.ToUpper()))
@@ -319,6 +345,7 @@ namespace KruBot
                 {
                     client.SendMessage(e.ChatMessage.Channel, command[1] + " has " + GetCurrency(command[1]).ToString() + " " + currency.CurrencyName);
                 }
+                return;
             }
 
 
@@ -337,6 +364,7 @@ namespace KruBot
                         client.SendMessage(e.ChatMessage.Channel, "Invalid Input");
                     }
                 }
+                return;
             }
             if (e.ChatMessage.Message.ToUpper().StartsWith("!RESET"))
             {
@@ -347,7 +375,75 @@ namespace KruBot
                     GiveCurrency(command[1], GetCurrency(command[1]) * -1);
 
                 }
+                return;
             }
+
+            // Mod only commands
+            if (e.ChatMessage.UserType == TwitchLib.Client.Enums.UserType.Moderator)
+            {
+                if (e.ChatMessage.Message.ToUpper().StartsWith("!NEWQUOTE"))
+                {
+                    string[] splitChatMessage = e.ChatMessage.Message.Split(' ');
+                    if (splitChatMessage.Length >= 3)
+                    {
+                        Quote newQuote = new Quote();
+                        // Format: "!NEWQUOTE !NEWCOMMAND Quote"
+                        newQuote.command = splitChatMessage[1].ToUpper().Trim();
+                        if (newQuote.command[0] != '!')
+                        {
+                            client.SendMessage(e.ChatMessage.Channel, "New quote was not added. Command must begin with ! symbol. Structure your command like \"!NEWQUOTE !COMMAND Quote goes here. \"");
+                            return;
+                        }
+                        string quoteText = "";
+                        for (int i = 2; i < splitChatMessage.Length; i++)
+                        {
+                            quoteText += splitChatMessage[i] + " ";
+                        }
+                        newQuote.quoteText = quoteText;
+                        quotes.Add(newQuote);
+                        File.WriteAllText("quotes.json", JsonConvert.SerializeObject(quotes, Formatting.Indented));
+                        client.SendMessage(e.ChatMessage.Channel, "Added quote " + newQuote.command + ".");
+                    }
+                    else
+                    {
+                        client.SendMessage(e.ChatMessage.Channel, "New quote was not added. Structure your command like \"!NEWQUOTE !COMMAND Quote goes here. \"");
+                    }
+                    return;
+                }
+
+                if (e.ChatMessage.Message.ToUpper().StartsWith("!DELETEQUOTE"))
+                {
+                    string[] splitChatMessage = e.ChatMessage.Message.Split(' ');
+                    // Format: "!DELETEQUOTE !COMMAND"
+                    foreach (Quote quote in quotes)
+                    {
+                        if (quote.command.StartsWith(splitChatMessage[1].ToUpper()))
+                        {
+                            quotes.Remove(quote);
+                            File.WriteAllText("quotes.json", JsonConvert.SerializeObject(quotes, Formatting.Indented));
+                            client.SendMessage(e.ChatMessage.Channel, "Removed " + quote.command + ".");
+                            return;
+                        }
+                    }
+
+                }
+            }
+
+            // Note: For now, if a mod creates a command that's already a system-defined command,
+            //  it will just never be called since the app will have returned before reaching this
+            //  part of the code.
+            if (e.ChatMessage.Message.ToUpper().StartsWith("!"))
+            {
+                foreach (Quote quote in quotes)
+                {
+                    if (quote.command.Equals(e.ChatMessage.Message.ToUpper().Trim()))
+                    {
+                        client.SendMessage(e.ChatMessage.Channel, "\"" + quote.quoteText.TrimEnd() + "\"");
+                        return;
+                    }
+                }
+            }
+
         }
 
         private void Client_OnJoinedChannel(object sender, OnJoinedChannelArgs e)
