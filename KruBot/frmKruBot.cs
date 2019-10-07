@@ -379,7 +379,7 @@ namespace KruBot
             }
 
             // Mod only commands
-            if (e.ChatMessage.UserType == TwitchLib.Client.Enums.UserType.Moderator)
+            if (e.ChatMessage.UserType == TwitchLib.Client.Enums.UserType.Moderator || e.ChatMessage.UserType == TwitchLib.Client.Enums.UserType.Broadcaster)
             {
                 if (e.ChatMessage.Message.ToUpper().StartsWith("!NEWQUOTE"))
                 {
