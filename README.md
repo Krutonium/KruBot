@@ -1,6 +1,6 @@
 # KruBot
 
-[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/Krutonium/KruBot)](https://github.com/Krutonium/KruBot/releases/latest) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Krutonium/KruBot) [![GitHub License](https://img.shields.io/github/license/Krutonium/KruBot)](https://github.com/Krutonium/KruBot/blob/master/LICENSE)
+[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/Krutonium/KruBot)](https://github.com/Krutonium/KruBot/releases/latest) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Krutonium/KruBot) [![GitHub License](https://img.shields.io/github/license/Krutonium/KruBot)](https://github.com/Krutonium/KruBot/blob/master/LICENSE) [![Twitch Status](https://img.shields.io/twitch/status/PFCKrutonium)](https://www.twitch.tv/pfckrutonium/)
 
 A Twitch Bot with YouTube Functionality
 
